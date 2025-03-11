@@ -1,6 +1,8 @@
 package com.example.crdemo.data.repository
 
 
+import com.example.crdemo.data.model.AnimalResponse
+import com.example.crdemo.data.model.PlantsResponse
 import com.example.crdemo.data.model.ZooResponse
 import com.example.crdemo.data.network.RetrofitInstance
 import com.google.gson.Gson
@@ -17,4 +19,12 @@ class ZooRepository {
         return RetrofitInstance.api.getZooData()
     }
 
+    suspend fun getPlantData(): Response<PlantsResponse> {
+        return RetrofitInstance.api.getPlantData()
+    }
+
+    suspend fun getAnimalData(): Response<AnimalResponse> {
+        return RetrofitInstance.api.getAnimalData()
+
+    }
 }
