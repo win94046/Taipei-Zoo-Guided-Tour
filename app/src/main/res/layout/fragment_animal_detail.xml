@@ -1,0 +1,171 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvAnimalName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="動物名稱"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvAnimalLatinName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="學名"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalPhylum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="門"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="綱"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="目"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalFamily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="科"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalConservation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保育狀況"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalDistribution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分布地區"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalHabitat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="棲息地"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="特徵"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalBehavior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="行為"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalDiet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="飲食習慣"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalCrisis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="危機"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAnimalLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="館區位置"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <!-- 動物圖片 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相關圖片"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <ImageView
+            android:id="@+id/ivAnimalPic1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:paddingTop="8dp"/>
+
+        <ImageView
+            android:id="@+id/ivAnimalPic2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:paddingTop="8dp"/>
+
+        <ImageView
+            android:id="@+id/ivAnimalPic3"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:paddingTop="8dp"/>
+
+        <ImageView
+            android:id="@+id/ivAnimalPic4"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:paddingTop="8dp"/>
+
+        <!-- 影片按鈕 -->
+        <Button
+            android:id="@+id/btnWatchVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="觀看影片"
+            android:paddingTop="8dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</ScrollView>

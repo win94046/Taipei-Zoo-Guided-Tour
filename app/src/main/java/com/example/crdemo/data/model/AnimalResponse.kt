@@ -13,11 +13,11 @@ data class ZooResult(
     @SerializedName("offset") val offset: Int,
     @SerializedName("count") val count: Int,
     @SerializedName("sort") val sort: String,
-    @SerializedName("results") val animals: List<Animal>
+    @SerializedName("results") val animalData: List<AnimalData>
 )
 
 // 個別動物的詳細資料
-data class Animal(
+data class AnimalData(
     @SerializedName("_id") val id: Int,
     @SerializedName("_importdate") val importDate: ImportDate,
     @SerializedName("a_name_ch") val nameChinese: String,

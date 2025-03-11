@@ -1,0 +1,96 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 植物名稱 -->
+        <TextView
+            android:id="@+id/tvPlantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="植物名稱"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <!-- 植物學名 -->
+        <TextView
+            android:id="@+id/tvPlantLatinName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="學名"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:paddingTop="4dp"/>
+
+        <!-- 植物科屬 -->
+        <TextView
+            android:id="@+id/tvPlantFamilyGenus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="科屬"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <!-- 簡介 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="簡介"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvPlantBrief"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <!-- 特徵 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="特徵"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvPlantFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <!-- 功能與應用 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="功能與應用"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvPlantFunctionApplication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <!-- 圖片 -->
+        <ImageView
+            android:id="@+id/ivPlantImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:paddingTop="8dp"/>
+
+    </LinearLayout>
+</ScrollView>
