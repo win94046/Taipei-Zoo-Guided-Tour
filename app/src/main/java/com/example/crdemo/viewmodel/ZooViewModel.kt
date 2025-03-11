@@ -18,8 +18,8 @@ class ZooViewModel : ViewModel() {
     private val _plantData = MutableLiveData<PlantData>()
     val plantData: LiveData<PlantData> get() = _plantData
 
-    private val _animalDataData = MutableLiveData<List<AnimalData>>()
-    val animalData: LiveData<List<AnimalData>> get() = _animalDataData
+    private val _animalDataRespone = MutableLiveData<List<AnimalData>>()
+    val animalRespone: LiveData<List<AnimalData>> get() = _animalDataRespone
 
     fun fetchZooData() {
         viewModelScope.launch {
@@ -52,7 +52,7 @@ class ZooViewModel : ViewModel() {
             try {
                 val response = repository.getAnimalData()
                 if (response.isSuccessful) {
-                    _animalDataData.value = response.body()?.result?.animalData ?: emptyList()
+                    _animalDataRespone.value = response.body()?.result?.animalData ?: emptyList()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

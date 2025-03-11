@@ -6,6 +6,13 @@
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
+    <Button
+        android:id="@+id/btnShowPlantDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="查看植物詳情"
+        android:layout_centerInParent="true"/>
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"

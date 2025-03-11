@@ -5,46 +5,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
-import com.example.crdemo.data.model.PlantData
 import com.example.crdemo.databinding.FragmentPlantDetailBinding
+import com.example.crdemo.viewmodel.ZooViewModel
 
-import com.google.gson.Gson
 
 class PlantDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentPlantDetailBinding
+    private var _binding: FragmentPlantDetailBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: ZooViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlantDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentPlantDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 取得 Plant JSON 並解析
-        val plantJson = arguments?.getString("plant_data")
-        val plant = Gson().fromJson(plantJson, PlantData::class.java)
+        // 取得傳遞的 JSON 並設定數據
 
-        // 設定 UI 顯示植物資訊
-        binding.apply {
-            tvPlantName.text = "${plant.nameChinese} (${plant.nameEnglish})"
-            tvPlantLatinName.text = "學名: ${plant.nameLatin}"
-            tvPlantFamilyGenus.text = "科: ${plant.family} | 屬: ${plant.genus}"
-            tvPlantBrief.text = plant.brief
-            tvPlantFeature.text = plant.feature
-            tvPlantFunctionApplication.text = plant.functionApplication
 
-            // 載入圖片
-            if (!plant.imageUrl.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(plant.imageUrl).into(ivPlantImage)
-            } else {
-                ivPlantImage.visibility = View.GONE
+        // 監聽 ViewModel 的 plantData 並更新 UI
+        viewModel.plantData.observe(viewLifecycleOwner) { plant ->
+            plant?.let {
+                binding.tvPlantName.text = it.nameChinese
+                binding.tvPlantLatinName.text = "學名: ${it.nameLatin}"
+                binding.tvPlantFamilyGenus.text = "科: ${it.family} | 屬: ${it.genus}"
+                binding.tvPlantBrief.text = it.brief
+                binding.tvPlantFeature.text = it.feature
+                binding.tvPlantFunctionApplication.text = it.functionApplication
+
+                // 使用 Glide 加載圖片
+                Glide.with(this)
+                    .load(it.imageUrl)
+                    .into(binding.ivPlantImage)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

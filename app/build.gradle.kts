@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-kapt") // 啟用 KAPT
+    id("kotlin-kapt") // 確保這行存在
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -84,4 +85,19 @@ dependencies {
 
     // add fragment-ktx
     implementation("androidx.fragment:fragment-ktx:1.8.3")
+
+    // Hilt dependencies
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.51.1")
+
+    // Room dependencies
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1") // Java 使用
+    kapt("androidx.room:room-compiler:2.6.1") // Kotlin 使用
+    //加入 Room KTX 來支援 suspend 函數
+    implementation("androidx.room:room-ktx:2.5.2")
+
 }
