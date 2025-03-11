@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.crdemo.data.model.Animal
+import com.example.crdemo.data.model.AnimalData
 import com.example.crdemo.data.model.Exhibit
 import com.example.crdemo.data.model.PlantData
-import com.example.crdemo.data.model.ZooResponse
 import com.example.crdemo.data.repository.ZooRepository
 import kotlinx.coroutines.launch
 
@@ -19,8 +18,8 @@ class ZooViewModel : ViewModel() {
     private val _plantData = MutableLiveData<PlantData>()
     val plantData: LiveData<PlantData> get() = _plantData
 
-    private val _animalData = MutableLiveData<List<Animal>>()
-    val animalData: LiveData<List<Animal>> get() = _animalData
+    private val _animalDataData = MutableLiveData<List<AnimalData>>()
+    val animalData: LiveData<List<AnimalData>> get() = _animalDataData
 
     fun fetchZooData() {
         viewModelScope.launch {
@@ -53,7 +52,7 @@ class ZooViewModel : ViewModel() {
             try {
                 val response = repository.getAnimalData()
                 if (response.isSuccessful) {
-                    _animalData.value = response.body()?.result?.animals ?: emptyList()
+                    _animalDataData.value = response.body()?.result?.animalData ?: emptyList()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
