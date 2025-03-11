@@ -79,4 +79,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0") // 自動解析 JSON
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0") // Log 記錄 HTTP 請求
 
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
 }
