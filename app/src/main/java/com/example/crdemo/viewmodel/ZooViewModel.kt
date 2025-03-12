@@ -1,63 +1,86 @@
 package com.example.crdemo.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.crdemo.data.model.AnimalData
+import com.example.crdemo.data.model.AnimalDataTable
 import com.example.crdemo.data.model.Exhibit
+import com.example.crdemo.data.model.ExhibitDetailView
+import com.example.crdemo.data.model.ExhibitTable
 import com.example.crdemo.data.model.PlantData
+import com.example.crdemo.data.model.PlantDataTable
 import com.example.crdemo.data.repository.ZooRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ZooViewModel : ViewModel() {
-    private val repository = ZooRepository()
-    private val _exhibits = MutableLiveData<List<Exhibit>>()
-    val exhibits: LiveData<List<Exhibit>> get() = _exhibits
+@HiltViewModel
+class ZooViewModel @Inject constructor(
+    private val repository: ZooRepository
+) : ViewModel() {
 
-    private val _plantData = MutableLiveData<PlantData>()
-    val plantData: LiveData<PlantData> get() = _plantData
+    // 🔥 LiveData - 監聽動物、植物、展覽數據
+    val allAnimals: LiveData<List<AnimalDataTable>> = repository.getAllAnimals()
+    val allPlants: LiveData<List<PlantDataTable>> = repository.getAllPlants()
+    val allExhibits: LiveData<List<ExhibitTable>> = repository.getAllExhibits()
 
-    private val _animalDataRespone = MutableLiveData<List<AnimalData>>()
-    val animalRespone: LiveData<List<AnimalData>> get() = _animalDataRespone
+    // 觀察展覽清單
+    val exhibits: LiveData<List<ExhibitTable>> = repository.getAllExhibits()
 
-    fun fetchZooData() {
+    // 觀察特定展覽的動植物
+    private val _exhibitDetail = MutableLiveData<ExhibitDetailView?>()
+    val exhibitDetail: LiveData<ExhibitDetailView?> get() = _exhibitDetail
+
+    fun refreshAllData() {
         viewModelScope.launch {
-            try {
-                val response = repository.getZooData()
-                if (response.isSuccessful) {
-                    _exhibits.value = response.body()?.result?.results ?: emptyList()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            repository.refreshAnimals()
+            repository.refreshPlants()
+            repository.refreshExhibits()
         }
     }
 
-    fun fetchPlantData() {
-        viewModelScope.launch {
-            try {
-                val response = repository.getPlantData()
-                if (response.isSuccessful) {
-                    _plantData.value = response.body()?.result?.results?.firstOrNull()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+    fun getExhibitDetails(exhibitName: String) {
+        Log.d("ZooViewModel", "getExhibitDetails called with exhibitName: $exhibitName")
+        repository.getExhibitDetails(exhibitName).observeForever {
+            _exhibitDetail.postValue(it)
         }
     }
 
-    fun fetchAnimalData(){
-        viewModelScope.launch {
-            try {
-                val response = repository.getAnimalData()
-                if (response.isSuccessful) {
-                    _animalDataRespone.value = response.body()?.result?.animalData ?: emptyList()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
 
+    // 🔄 使用 ViewModelScope 進行協程操作
+    fun refreshAnimals() {
+        viewModelScope.launch {
+            repository.refreshAnimals()
         }
+    }
+
+    fun refreshPlants() {
+        viewModelScope.launch {
+            repository.refreshPlants()
+        }
+    }
+
+    fun refreshExhibits() {
+        viewModelScope.launch {
+            repository.refreshExhibits()
+        }
+    }
+
+    // 🔍 根據 ID 查詢特定動物
+    fun getAnimalById(id: Int): LiveData<AnimalDataTable> {
+        return repository.getAnimalById(id)
+    }
+
+    // 🔍 根據 ID 查詢特定植物
+    fun getPlantById(id: Int): LiveData<PlantDataTable> {
+        return repository.getPlantById(id)
+    }
+
+    // 🔍 根據 ID 查詢特定展覽
+    fun getExhibitById(id: Int): LiveData<ExhibitTable> {
+        return repository.getExhibitById(id)
     }
 }

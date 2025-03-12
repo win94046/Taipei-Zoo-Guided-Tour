@@ -20,6 +20,7 @@ data class ResultData(
 // 植物資料
 data class PlantData(
     val id: Int,
+    val importDate: ImportDate,
     val nameChinese: String,
     val nameEnglish: String,
     val nameLatin: String,
@@ -27,6 +28,12 @@ data class PlantData(
     val genus: String,
     val brief: String,
     val feature: String,
-    val functionApplication: String,
-    val imageUrl: String?
+    val functionAndApplication: String,
+    val alsoKnown: String?,
+    val geoLocation: String?,
+    val location: String?,
+    val code: String?,
+    val imageUrl: String?,
+    val update: String?,
+    val cid: String?
 )

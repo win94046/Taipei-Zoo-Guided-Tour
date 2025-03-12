@@ -2,10 +2,14 @@ package com.example.crdemo.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.crdemo.data.model.ExhibitDetailView
 import com.example.crdemo.data.model.ExhibitTable
 
 @Dao
 interface ExhibitDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertExhibits(exhibits: List<ExhibitTable>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExhibit(exhibit: ExhibitTable)
 
@@ -17,4 +21,8 @@ interface ExhibitDao {
 
     @Delete
     suspend fun deleteExhibit(exhibit: ExhibitTable)
+
+
+    @Query("SELECT * FROM ExhibitDetailView WHERE exhibitName = :exhibitName")
+    fun getExhibitDetail(exhibitName: String): LiveData<ExhibitDetailView?>
 }

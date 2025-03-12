@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "plants")
 data class PlantDataTable(
     @PrimaryKey val id: Int,
+    val date: String,
+    val timezone_type: Int,
+    val timezone: String,
     val nameChinese: String,
     val nameEnglish: String,
     val nameLatin: String,
@@ -14,6 +17,12 @@ data class PlantDataTable(
     val genus: String,
     val brief: String,
     val feature: String,
-    val functionApplication: String,
-    val imageUrl: String?
+    val functionAndApplication: String,
+    val alsoKnown: String?,
+    val geoLocation: String?,
+    val location: String?,
+    val code: String?,
+    val imageUrl: String?,
+    val update: String?,
+    val cid: String?
 )

@@ -1,20 +1,30 @@
 package com.example.crdemo.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.crdemo.data.model.AnimalData
+import com.example.crdemo.data.model.AnimalDataTable
 import com.example.crdemo.databinding.FragmentAnimalDetailBinding
+import com.example.crdemo.viewmodel.ZooViewModel
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AnimalDetailFragment : Fragment() {
 
     private var _binding: FragmentAnimalDetailBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: ZooViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,11 +37,23 @@ class AnimalDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 取得 Animal JSON 並解析
-        val animalJson = arguments?.getString("animal_data")
-        val animal = Gson().fromJson(animalJson, AnimalData::class.java)
+        // 取得 animalId
+        val animalId = arguments?.getInt("animal_id") ?: -1
+        if (animalId == -1) {
+            Toast.makeText(requireContext(), "找不到動物資訊", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        // 設定 UI 顯示動物資訊
+        // 監聽 ViewModel 的 LiveData，當數據變更時自動更新 UI
+        viewModel.getAnimalById(animalId).observe(viewLifecycleOwner) { animal ->
+            animal?.let { updateUI(it) }
+        }
+    }
+
+    /**
+     * 更新 UI 顯示動物資訊
+     */
+    private fun updateUI(animal: AnimalDataTable) {
         binding.apply {
             tvAnimalName.text = "${animal.nameChinese} (${animal.nameEnglish})"
             tvAnimalLatinName.text = "學名: ${animal.nameLatin}"
@@ -49,35 +71,16 @@ class AnimalDetailFragment : Fragment() {
             tvAnimalLocation.text = "館區位置: ${animal.location}"
 
             // 載入圖片
-            if (!animal.pic01Url.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(animal.pic01Url).into(ivAnimalPic1)
-            } else {
-                ivAnimalPic1.visibility = View.GONE
-            }
-
-            if (!animal.pic02Url.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(animal.pic02Url).into(ivAnimalPic2)
-            } else {
-                ivAnimalPic2.visibility = View.GONE
-            }
-
-            if (!animal.pic03Url.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(animal.pic03Url).into(ivAnimalPic3)
-            } else {
-                ivAnimalPic3.visibility = View.GONE
-            }
-
-            if (!animal.pic04Url.isNullOrEmpty()) {
-                Glide.with(requireContext()).load(animal.pic04Url).into(ivAnimalPic4)
-            } else {
-                ivAnimalPic4.visibility = View.GONE
-            }
+            loadAnimalImage(animal.pic01Url, ivAnimalPic1)
+            loadAnimalImage(animal.pic02Url, ivAnimalPic2)
+            loadAnimalImage(animal.pic03Url, ivAnimalPic3)
+            loadAnimalImage(animal.pic04Url, ivAnimalPic4)
 
             // 設定影片按鈕
             if (!animal.videoUrl.isNullOrEmpty()) {
                 btnWatchVideo.visibility = View.VISIBLE
                 btnWatchVideo.setOnClickListener {
-                    // 這裡可以加上跳轉到 WebView 或 Youtube 播放影片
+                    openVideo(animal.videoUrl)
                 }
             } else {
                 btnWatchVideo.visibility = View.GONE
@@ -85,9 +88,28 @@ class AnimalDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * 使用 Glide 載入圖片
+     */
+    private fun loadAnimalImage(url: String?, imageView: ImageView) {
+        if (!url.isNullOrEmpty()) {
+            Glide.with(requireContext()).load(url).into(imageView)
+        } else {
+            imageView.visibility = View.GONE
+        }
+    }
+
+    /**
+     * 開啟影片（WebView 或 YouTube App）
+     */
+    private fun openVideo(videoUrl: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+        startActivity(intent)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+

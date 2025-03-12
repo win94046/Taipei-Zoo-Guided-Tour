@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- 讓 NestedScrollView 佔滿剩餘空間 -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivExhibitImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tvExhibitName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="展覽名稱"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvExhibitCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="類別"
+            android:textSize="16sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvExhibitInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="展覽介紹"
+            android:textSize="14sp"
+            android:paddingTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvExhibitMemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="備註"
+            android:textSize="14sp"
+            android:paddingTop="4dp"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
+    <!-- 確保按鈕區域固定高度 60dp，不會被擠掉 -->
+<FrameLayout
+android:layout_width="match_parent"
+android:layout_height="60dp"
+android:gravity="center"
+android:background="@android:color/white"
+android:elevation="4dp">
+
+<Button
+    android:id="@+id/btnClose"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="關閉"/>
+</FrameLayout>
+
+    </LinearLayout>

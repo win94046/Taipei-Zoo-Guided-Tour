@@ -8,6 +8,9 @@ import com.example.crdemo.data.model.AnimalDataTable
 @Dao
 interface AnimalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAnimals(animals: List<AnimalDataTable>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAnimal(animal: AnimalDataTable)
 
     @Query("SELECT * FROM animals WHERE id = :id")
