@@ -4,13 +4,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- RecyclerView 顯示展覽列表 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"/>
-
     <!-- 選擇展覽後顯示動植物 -->
     <TextView
         android:id="@+id/tvExhibitName"
@@ -35,5 +28,14 @@
         android:text="植物:"
         android:textSize="18sp"
         android:paddingTop="8dp"/>
+
+
+    <!-- RecyclerView 顯示展覽列表 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"/>
+
 
 </LinearLayout>

@@ -40,7 +40,7 @@ class ExhibitDetailFragment : DialogFragment() {
                 binding.tvExhibitMemo.text = "備註: ${it.e_memo}"
 
                 Glide.with(this)
-                    .load(it.e_pic_url)
+                    .load(it.e_pic_url.toSecureUrl())
                     .into(binding.ivExhibitImage)
 
                 binding.btnClose.setOnClickListener { dismiss() }

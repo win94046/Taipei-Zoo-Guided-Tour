@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "plants")
 data class PlantDataTable(
     @PrimaryKey val id: Int,
-    val date: String,
+    val date: String?,
     val timezone_type: Int,
     val timezone: String,
     val nameChinese: String,

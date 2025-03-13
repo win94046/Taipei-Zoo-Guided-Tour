@@ -70,6 +70,7 @@ class ZooRepository @Inject constructor(
                             id = it.id,
                             nameChinese = it.nameChinese,
                             nameEnglish = it.nameEnglish,
+                            alsoKnown = it.alsoKnown,
                             nameLatin = it.nameLatin,
                             phylum = it.phylum,
                             animalClass = it.animalClass,
@@ -121,8 +122,8 @@ class ZooRepository @Inject constructor(
                         PlantDataTable(
                             id = it.id,
                             date = it.importDate?.date ?: "", // ✅ 避免 NullPointerException
-                            timezone_type = it.importDate.timezone_type,
-                            timezone = it.importDate.timezone,
+                            timezone_type = it.importDate?.timezone_type ?: 0,
+                            timezone = it.importDate?.timezone ?: "",
                             nameChinese = it.nameChinese,
                             nameEnglish = it.nameEnglish,
                             nameLatin = it.nameLatin,

@@ -22,6 +22,7 @@ data class AnimalData(
     @SerializedName("_importdate") val importDate: ImportDate,
     @SerializedName("a_name_ch") val nameChinese: String,
     @SerializedName("a_name_en") val nameEnglish: String,
+    @SerializedName("a_alsoknown") val alsoKnown: String,
     @SerializedName("a_name_latin") val nameLatin: String,
     @SerializedName("a_phylum") val phylum: String,
     @SerializedName("a_class") val animalClass: String,

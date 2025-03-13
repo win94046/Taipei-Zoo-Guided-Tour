@@ -25,9 +25,6 @@ class ZooViewModel @Inject constructor(
     // 🔥 LiveData - 監聽動物、植物、展覽數據
     val allAnimals: LiveData<List<AnimalDataTable>> = repository.getAllAnimals()
     val allPlants: LiveData<List<PlantDataTable>> = repository.getAllPlants()
-    val allExhibits: LiveData<List<ExhibitTable>> = repository.getAllExhibits()
-
-    // 觀察展覽清單
     val exhibits: LiveData<List<ExhibitTable>> = repository.getAllExhibits()
 
     // 觀察特定展覽的動植物

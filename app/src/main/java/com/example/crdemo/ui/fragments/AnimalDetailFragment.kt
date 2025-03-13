@@ -68,7 +68,7 @@ class AnimalDetailFragment : Fragment() {
             tvAnimalBehavior.text = "行為: ${animal.behavior ?: "無"}"
             tvAnimalDiet.text = "飲食習慣: ${animal.diet ?: "無"}"
             tvAnimalCrisis.text = "危機: ${animal.crisis ?: "無"}"
-            tvAnimalLocation.text = "館區位置: ${animal.location}"
+            tvAnimalInfo.text = "館區位置: ${animal.location}"
 
             // 載入圖片
             loadAnimalImage(animal.pic01Url, ivAnimalPic1)
