@@ -1,9 +1,16 @@
 <resources>
-    <!-- ✅ 使用 AppCompat 主題 -->
+    <!-- 使用 AppCompat 主題 -->
     <style name="Theme.CRDemo" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 既有設定 -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
         <item name="android:windowBackground">@color/white</item>
+
+    </style>
+    <style name="MyDrawerTheme" parent="ThemeOverlay.AppCompat.Light">
+        <!-- 統一文字顏色 -->
+        <item name="android:textColor">@android:color/black</item>
+        <!-- 你也可以在這裡設定想要的字體大小、字重等 -->
     </style>
 </resources>

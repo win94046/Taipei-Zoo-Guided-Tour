@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg 
+    width="800" 
+    height="600" 
+    viewBox="0 0 800 600"
+    preserveAspectRatio="xMidYMid meet"
+    xmlns="http://www.w3.org/2000/svg"
+    style="background-color: #ccffcc;">
+  
+  <!-- 題目：動物園主題場景 -->
+  <title>Zoo Theme - Scalable SVG</title>
+  
+  <!-- 背景草地 -->
+  <rect x="0" y="0" width="800" height="600" fill="#ccffcc" />
+
+  <!-- 太陽 -->
+  <circle cx="700" cy="100" r="50" fill="#ffdd00" />
+
+  <!-- 幾朵簡單的雲 -->
+  <ellipse cx="150" cy="100" rx="60" ry="30" fill="#ffffff" opacity="0.8" />
+  <ellipse cx="220" cy="110" rx="50" ry="25" fill="#ffffff" opacity="0.8" />
+  <ellipse cx="180" cy="90"  rx="40" ry="20" fill="#ffffff" opacity="0.8" />
+
+  <!-- 動物園文字看板 -->
+  <rect x="300" y="30" width="200" height="80" fill="#a0522d" stroke="#654321" stroke-width="5" />
+  <text x="400" y="80"
+        text-anchor="middle" 
+        font-size="40" 
+        fill="#fffaf0" 
+        font-family="sans-serif">
+    ZOO
+  </text>
+
+  <!-- 動物 1：簡易獅子 (以圓與多邊形構成) -->
+  <!-- 獅子的身體 -->
+  <circle cx="200" cy="400" r="50" fill="#f2a900" />
+  <!-- 獅子的臉 -->
+  <circle cx="200" cy="350" r="30" fill="#f2a900" stroke="#994400" stroke-width="3" />
+  <!-- 獅子的鬃毛 (示意) -->
+  <circle cx="200" cy="350" r="40" fill="none" stroke="#994400" stroke-width="6" />
+  <!-- 眼睛 -->
+  <circle cx="190" cy="345" r="3" fill="#000000" />
+  <circle cx="210" cy="345" r="3" fill="#000000" />
+  <!-- 嘴巴 -->
+  <path d="M195 355 Q200 360 205 355" fill="none" stroke="#000000" stroke-width="2" />
+
+  <!-- 動物 2：簡易長頸鹿 (以長方形與多邊形構成) -->
+  <!-- 長頸鹿身體 -->
+  <rect x="400" y="350" width="60" height="80" fill="#f1c232" stroke="#a67c00" stroke-width="2" />
+  <!-- 長頸鹿的斑點 -->
+  <circle cx="420" cy="380" r="5" fill="#a67c00" />
+  <circle cx="435" cy="410" r="5" fill="#a67c00" />
+  <circle cx="450" cy="375" r="5" fill="#a67c00" />
+  <circle cx="430" cy="440" r="5" fill="#a67c00" />
+  <!-- 長頸鹿脖子 -->
+  <rect x="420" y="300" width="20" height="60" fill="#f1c232" stroke="#a67c00" stroke-width="2" />
+  <!-- 長頸鹿頭 -->
+  <circle cx="430" cy="290" r="15" fill="#f1c232" stroke="#a67c00" stroke-width="2" />
+  <!-- 眼睛 -->
+  <circle cx="426" cy="288" r="2.5" fill="#000000" />
+  <circle cx="434" cy="288" r="2.5" fill="#000000" />
+  <!-- 角 -->
+  <rect x="425" y="272" width="3" height="8" fill="#a67c00" />
+  <rect x="432" y="272" width="3" height="8" fill="#a67c00" />
+
+  <!-- 動物 3：簡易大象 (以圓與橢圓構成) -->
+  <!-- 大象身體 -->
+  <ellipse cx="650" cy="420" rx="60" ry="40" fill="#aaaaaa" stroke="#666666" stroke-width="2" />
+  <!-- 大象頭部 -->
+  <circle cx="590" cy="400" r="30" fill="#aaaaaa" stroke="#666666" stroke-width="2" />
+  <!-- 大象耳朵 -->
+  <path d="M590 375
+           C 570 385, 570 415, 590 425
+           C 605 425, 605 385, 590 375
+           Z" fill="#bbbbbb" />
+  <!-- 大象鼻子（象鼻） -->
+  <path d="M560 395
+           C 550 400, 550 405, 560 410
+           L 580 410
+           C 590 410, 590 395, 580 395
+           Z" fill="#aaaaaa" />
+  <!-- 眼睛 -->
+  <circle cx="600" cy="395" r="3" fill="#000000" />
+
+  <!-- 地面的草叢 (裝飾) -->
+  <path d="M0 500 
+           Q 100 450, 200 500
+           T 400 500
+           T 600 500
+           T 800 500
+           L 800 600
+           L 0 600
+           Z"
+        fill="#77c377" />
+
+  <!-- 版權或作者簽名 -->
+  <text x="400" y="590"
+        text-anchor="middle" 
+        font-size="16" 
+        fill="#333333"
+        font-family="sans-serif">
+    © YourZooDesign, 2025
+  </text>
+
+</svg>

@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity() {
         // 設定 Toolbar 為 ActionBar
         setSupportActionBar(binding.toolbar)
 
-        // Toolbar 左上角圖示
+        // 漢堡按鈕
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         binding.toolbar.setNavigationIcon(R.drawable.menu_summary_button_icon)
 
-        // 點擊左上角圖示 -> 開啟 / 關閉左側抽屜
+        /// 點擊左上角 -> 開 / 關 Drawer
         binding.toolbar.setNavigationOnClickListener {
             toggleDrawer()
         }
@@ -72,17 +72,17 @@ class MainActivity : AppCompatActivity() {
     private fun initDrawerMenuClick() {
         // 展覽區域
         binding.leftDrawer?.findViewById<TextView>(R.id.tvExhibitMenu)?.setOnClickListener {
-            binding.recyclerView.adapter = exhibitAdapter
+            binding.recyclerView?.adapter = exhibitAdapter
             binding.drawerLayout?.closeDrawer(GravityCompat.START) // 選完就關閉抽屜
         }
         // 動物總攬
         binding.leftDrawer?.findViewById<TextView>(R.id.tvAnimalMenu)?.setOnClickListener {
-            binding.recyclerView.adapter = animalAdapter
+            binding.recyclerView?.adapter = animalAdapter
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
         // 植物總攬
         binding.leftDrawer.findViewById<TextView>(R.id.tvPlantMenu).setOnClickListener {
-            binding.recyclerView.adapter = plantAdapter
+            binding.recyclerView?.adapter = plantAdapter
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
     }
@@ -100,8 +100,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 預設先顯示「動物總攬」
-        binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-        binding.recyclerView.adapter = animalAdapter
+        binding.recyclerView?.layoutManager = LinearLayoutManager(this@MainActivity)
+        binding.recyclerView?.adapter = animalAdapter
     }
     private fun setupObservers() {
         zooViewModel.exhibits.observe(this) { exhibitList ->
@@ -125,7 +125,9 @@ class MainActivity : AppCompatActivity() {
         fragment.arguments = bundle
         fragment.show(supportFragmentManager, "ExhibitDetailFragment")
     }
-    private fun showAnimalDetail(animalId: Int) { /* ... */ }
+    private fun showAnimalDetail(animalId: Int) {
+
+    }
     private fun showPlantDetail(plantId: Int) { /* ... */ }
 }
 

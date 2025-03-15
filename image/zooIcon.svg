@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" 
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMid meet">
+  
+  <!-- 背景圓框 -->
+  <circle cx="100" cy="100" r="90" fill="#F8F8F8" stroke="#444" stroke-width="4"/>
+
+  <!-- 獅子的頭 -->
+  <circle cx="70" cy="100" r="20" fill="#F4A900" stroke="#D17D00" stroke-width="3"/>
+  <!-- 獅子的鬃毛 -->
+  <circle cx="70" cy="100" r="25" fill="none" stroke="#D17D00" stroke-width="5"/>
+  <!-- 眼睛 -->
+  <circle cx="65" cy="95" r="2" fill="#000"/>
+  <circle cx="75" cy="95" r="2" fill="#000"/>
+  <!-- 嘴巴 -->
+  <path d="M65 105 Q70 110 75 105" fill="none" stroke="#000" stroke-width="2"/>
+
+  <!-- 大象的身體 -->
+  <ellipse cx="130" cy="110" rx="30" ry="20" fill="#AAA" stroke="#666" stroke-width="3"/>
+  <!-- 大象的頭 -->
+  <circle cx="110" cy="100" r="15" fill="#AAA" stroke="#666" stroke-width="3"/>
+  <!-- 眼睛 -->
+  <circle cx="108" cy="95" r="2" fill="#000"/>
+  <!-- 象鼻 -->
+  <path d="M100 100 Q90 110 100 120" fill="none" stroke="#AAA" stroke-width="4"/>
+
+  <!-- 長頸鹿 -->
+  <rect x="145" y="90" width="10" height="40" fill="#F1C232" stroke="#A67C00" stroke-width="2"/>
+  <circle cx="150" cy="80" r="10" fill="#F1C232" stroke="#A67C00" stroke-width="2"/>
+  <!-- 眼睛 -->
+  <circle cx="147" cy="78" r="2" fill="#000"/>
+  <!-- 角 -->
+  <line x1="146" y1="72" x2="144" y2="65" stroke="#A67C00" stroke-width="3"/>
+  <line x1="154" y1="72" x2="156" y2="65" stroke="#A67C00" stroke-width="3"/>
+
+  <!-- "ZOO" 文字 -->
+  <text x="100" y="170" font-size="32" fill="#333" font-family="Arial" text-anchor="middle" font-weight="bold">
+    ZOO
+  </text>
+
+</svg>

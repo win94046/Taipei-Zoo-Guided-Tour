@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
 
     <!-- 主要內容區 (Main Content) -->
     <LinearLayout
@@ -59,47 +59,123 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- 左側抽屜區域 -->
     <LinearLayout
         android:id="@+id/leftDrawer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/white"
         android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="@color/menu_background_color"
         android:padding="16dp"
+        android:theme="@style/MyDrawerTheme"
     >
+
+    <!-- 可以在背景上再加一個半透明罩層 (如果想讓文字清晰可見)，可用 FrameLayout 包裹 -->
+
+    <!-- 圓形頭像 (例如放一張園區LOGO、動物圖案，或使用者頭像) -->
+    <ImageView
+        android:id="@+id/imgZooLogo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/zoo_icon"
+        android:background="@color/white" />
+
+    <!-- 園區名稱或使用者名稱 -->
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center_horizontal"
+        android:text="台北動物園"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- 接著是選單項目，可用 TextView / LinearLayout / ListView / RecyclerView 或 NavigationView -->
+    <LinearLayout
+        android:id="@+id/itemExhibit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:padding="8dp"
+        android:background="@drawable/bg_item_selector"
+    >
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_exhibit"
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:id="@+id/tvExhibitMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/menu_summary_button_icon"
-        android:drawablePadding="8dp"
+        android:layout_marginStart="16dp"
         android:text="展覽區域"
-        android:textSize="18sp"
-        android:padding="12dp" />
-
-    <TextView
-        android:id="@+id/tvAnimalMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/menu_summary_button_icon"
-        android:drawablePadding="8dp"
-        android:text="動物總攬"
-        android:textSize="18sp"
-        android:padding="12dp" />
-
-    <TextView
-        android:id="@+id/tvPlantMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/menu_summary_button_icon"
-        android:drawablePadding="8dp"
-        android:text="植物總攬"
-        android:textSize="18sp"
-        android:padding="12dp" />
-
-    <!-- 可以加上分隔線、頭像、文字等 -->
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical" />
 </LinearLayout>
 
-</androidx.drawerlayout.widget.DrawerLayout>
+<LinearLayout
+    android:id="@+id/itemAnimal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_item_selector"
+>
+
+<ImageView
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:src="@drawable/ic_animal"
+    android:layout_gravity="center_vertical" />
+
+<TextView
+    android:id="@+id/tvAnimalMenu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:text="動物總攬"
+    android:textSize="16sp"
+    android:layout_gravity="center_vertical" />
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/itemPlant"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/bg_item_selector"
+>
+
+<ImageView
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:src="@drawable/ic_plant"
+    android:layout_gravity="center_vertical" />
+
+<TextView
+    android:id="@+id/tvPlantMenu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:text="植物總攬"
+    android:textSize="16sp"
+    android:layout_gravity="center_vertical" />
+</LinearLayout>
+
+    <!-- 你也可以在抽屜底部增加一個登出或設定選項 -->
+
+    </LinearLayout>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
