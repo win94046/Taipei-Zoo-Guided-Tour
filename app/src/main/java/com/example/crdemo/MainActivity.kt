@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.crdemo.adapter.AnimalAdapter
 import com.example.crdemo.adapter.ExhibitAdapter
@@ -32,12 +34,14 @@ class MainActivity : AppCompatActivity() {
 
         // 設定 Toolbar 為 ActionBar
         setSupportActionBar(binding.toolbar)
-        // 設定左上角的 Navigation Icon (類似漢堡選單)
-        supportActionBar?.setDisplayHomeAsUpEnabled(false) // 關閉自動返回箭頭
-        binding.toolbar?.setNavigationIcon(R.drawable.menu_summary_button_icon) // 你需要準備對應圖檔
-        binding.toolbar?.setNavigationOnClickListener {
-            // 點擊左上角時，顯示選單
-            showPopupMenu(it)
+
+        // Toolbar 左上角圖示
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        binding.toolbar.setNavigationIcon(R.drawable.menu_summary_button_icon)
+
+        // 點擊左上角圖示 -> 開啟 / 關閉左側抽屜
+        binding.toolbar.setNavigationOnClickListener {
+            toggleDrawer()
         }
 
         setupAdapters()
@@ -45,9 +49,45 @@ class MainActivity : AppCompatActivity() {
 
         // 取得動物、植物與展覽資料
         zooViewModel.refreshAllData()
+
+        // 綁定抽屜內各個 TextView 的點擊事件
+        initDrawerMenuClick()
     }
 
-    /** 初始化三種 Adapter，並預設先顯示動物 Adapter（可自由調整預設顯示） */
+
+    /**
+     * 開關抽屜
+     */
+    private fun toggleDrawer() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+    }
+
+    /**
+     * 設定抽屜裡的 TextView click 事件
+     */
+    private fun initDrawerMenuClick() {
+        // 展覽區域
+        binding.leftDrawer?.findViewById<TextView>(R.id.tvExhibitMenu)?.setOnClickListener {
+            binding.recyclerView.adapter = exhibitAdapter
+            binding.drawerLayout?.closeDrawer(GravityCompat.START) // 選完就關閉抽屜
+        }
+        // 動物總攬
+        binding.leftDrawer?.findViewById<TextView>(R.id.tvAnimalMenu)?.setOnClickListener {
+            binding.recyclerView.adapter = animalAdapter
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        // 植物總攬
+        binding.leftDrawer.findViewById<TextView>(R.id.tvPlantMenu).setOnClickListener {
+            binding.recyclerView.adapter = plantAdapter
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        }
+    }
+
+    // ==================== 其餘程式不變 ====================
     private fun setupAdapters() {
         exhibitAdapter = ExhibitAdapter { exhibitId ->
             showExhibitDetail(exhibitId)
@@ -63,10 +103,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         binding.recyclerView.adapter = animalAdapter
     }
-
-    /** 這裡設定三個 LiveData 觀察者 */
     private fun setupObservers() {
-        // 監聽展覽列表
         zooViewModel.exhibits.observe(this) { exhibitList ->
             exhibitAdapter.submitList(exhibitList)
         }
@@ -80,38 +117,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** 顯示 PopupMenu，讓使用者選擇要顯示的清單 */
-    private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(this, view)
-        // 新增三個選單項目
-        popupMenu.menu.add(0, 0, 0, "展覽區域")
-        popupMenu.menu.add(0, 1, 0, "動物總攬")
-        popupMenu.menu.add(0, 2, 0, "植物總攬")
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                0 -> {
-                    // 切換 RecyclerView 顯示 exhibitAdapter
-                    binding.recyclerView.adapter = exhibitAdapter
-                    true
-                }
-                1 -> {
-                    // 切換 RecyclerView 顯示 animalAdapter
-                    binding.recyclerView.adapter = animalAdapter
-                    true
-                }
-                2 -> {
-                    // 切換 RecyclerView 顯示 plantAdapter
-                    binding.recyclerView.adapter = plantAdapter
-                    true
-                }
-                else -> false
-            }
-        }
-        popupMenu.show()
-    }
-
-    // ======= 以下為詳細資料跳轉或顯示 =======
     private fun showExhibitDetail(exhibitId: Int) {
         val fragment = ExhibitDetailFragment()
         val bundle = Bundle().apply {
@@ -120,15 +125,9 @@ class MainActivity : AppCompatActivity() {
         fragment.arguments = bundle
         fragment.show(supportFragmentManager, "ExhibitDetailFragment")
     }
-
-    private fun showAnimalDetail(animalId: Int) {
-        // 顯示或跳轉到動物的詳細資料
-
-    }
-
-    private fun showPlantDetail(plantId: Int) {
-        // 顯示或跳轉到植物的詳細資料
-    }
+    private fun showAnimalDetail(animalId: Int) { /* ... */ }
+    private fun showPlantDetail(plantId: Int) { /* ... */ }
 }
+
 
 
