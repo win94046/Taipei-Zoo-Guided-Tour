@@ -7,19 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.crdemo.data.model.AnimalData
 import com.example.crdemo.data.model.AnimalDataTable
 import com.example.crdemo.databinding.FragmentAnimalDetailBinding
+import com.example.crdemo.utils.toSecureUrl
 import com.example.crdemo.viewmodel.ZooViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AnimalDetailFragment : Fragment() {
+class AnimalDetailFragment : DialogFragment() {
 
     private var _binding: FragmentAnimalDetailBinding? = null
     private val binding get() = _binding!!
@@ -27,7 +30,8 @@ class AnimalDetailFragment : Fragment() {
     private val viewModel: ZooViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimalDetailBinding.inflate(inflater, container, false)
@@ -38,54 +42,52 @@ class AnimalDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 取得 animalId
-        val animalId = arguments?.getInt("animal_id") ?: -1
-        if (animalId == -1) {
-            Toast.makeText(requireContext(), "找不到動物資訊", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // 監聽 ViewModel 的 LiveData，當數據變更時自動更新 UI
+        val animalId = arguments?.getInt("animal_id")?: return
         viewModel.getAnimalById(animalId).observe(viewLifecycleOwner) { animal ->
-            animal?.let { updateUI(it) }
-        }
-    }
+            animal?.let {
+                binding.tvAnimalName.text = "${animal.nameChinese} (${animal.nameEnglish})"
+                binding.tvAnimalLatinName.showOrGone("學名: ${animal.nameLatin}")
+                binding.tvAnimalPhylum.showOrGone("門: ${animal.phylum}")
+                binding.tvAnimalClass.showOrGone("綱: ${animal.animalClass}")
+                binding.tvAnimalOrder.showOrGone("目: ${animal.order}")
+                binding.tvAnimalFamily.showOrGone("科: ${animal.family}")
+                binding.tvAnimalConservation.showOrGone("保育狀況: ${animal.conservation}")
+                binding.tvAnimalDistribution.showOrGone("分布地區: \n${animal.distribution}")
+                binding.tvAnimalHabitat.showOrGone("棲息地: \n${animal.habitat ?: "未知"}")
+                binding.tvAnimalFeature.showOrGone("特徵: \n${animal.feature ?: "無"}")
+                binding.tvAnimalBehavior.showOrGone("行為: \n${animal.behavior ?: "無"}")
+                binding.tvAnimalDiet.showOrGone("飲食習慣: \n${animal.diet ?: "無"}")
+                binding.tvAnimalCrisis.showOrGone("危機: \n${animal.crisis ?: "無"}")
+                binding.tvAnimalInfo.showOrGone("館區位置: \n${animal.location}")
 
-    /**
-     * 更新 UI 顯示動物資訊
-     */
-    private fun updateUI(animal: AnimalDataTable) {
-        binding.apply {
-            tvAnimalName.text = "${animal.nameChinese} (${animal.nameEnglish})"
-            tvAnimalLatinName.text = "學名: ${animal.nameLatin}"
-            tvAnimalPhylum.text = "門: ${animal.phylum}"
-            tvAnimalClass.text = "綱: ${animal.animalClass}"
-            tvAnimalOrder.text = "目: ${animal.order}"
-            tvAnimalFamily.text = "科: ${animal.family}"
-            tvAnimalConservation.text = "保育狀況: ${animal.conservation}"
-            tvAnimalDistribution.text = "分布地區: ${animal.distribution}"
-            tvAnimalHabitat.text = "棲息地: ${animal.habitat ?: "未知"}"
-            tvAnimalFeature.text = "特徵: ${animal.feature ?: "無"}"
-            tvAnimalBehavior.text = "行為: ${animal.behavior ?: "無"}"
-            tvAnimalDiet.text = "飲食習慣: ${animal.diet ?: "無"}"
-            tvAnimalCrisis.text = "危機: ${animal.crisis ?: "無"}"
-            tvAnimalInfo.text = "館區位置: ${animal.location}"
+                // 載入圖片
+                loadAnimalImage(animal.pic01Url, binding.ivAnimalPic1)
+                loadAnimalImage(animal.pic02Url, binding.ivAnimalPic2)
+                loadAnimalImage(animal.pic03Url, binding.ivAnimalPic3)
+                loadAnimalImage(animal.pic04Url, binding.ivAnimalPic4)
 
-            // 載入圖片
-            loadAnimalImage(animal.pic01Url, ivAnimalPic1)
-            loadAnimalImage(animal.pic02Url, ivAnimalPic2)
-            loadAnimalImage(animal.pic03Url, ivAnimalPic3)
-            loadAnimalImage(animal.pic04Url, ivAnimalPic4)
-
-            // 設定影片按鈕
-            if (!animal.videoUrl.isNullOrEmpty()) {
-                btnWatchVideo.visibility = View.VISIBLE
-                btnWatchVideo.setOnClickListener {
-                    openVideo(animal.videoUrl)
+                // 設定影片按鈕
+                if (!animal.videoUrl.isNullOrEmpty()) {
+                    binding.btnWatchVideo.visibility = View.VISIBLE
+                    binding.btnWatchVideo.setOnClickListener {
+                        openVideo(animal.videoUrl)
+                    }
+                } else {
+                    binding.btnWatchVideo.visibility = View.GONE
                 }
-            } else {
-                btnWatchVideo.visibility = View.GONE
+
+                binding.btnClose.setOnClickListener { dismiss() }
             }
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.apply {
+            val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+            val height = (resources.displayMetrics.heightPixels * 0.8).toInt()
+            setLayout(width, height) }
     }
 
     /**
@@ -93,7 +95,7 @@ class AnimalDetailFragment : Fragment() {
      */
     private fun loadAnimalImage(url: String?, imageView: ImageView) {
         if (!url.isNullOrEmpty()) {
-            Glide.with(requireContext()).load(url).into(imageView)
+            Glide.with(requireContext()).load(url.toSecureUrl()).into(imageView)
         } else {
             imageView.visibility = View.GONE
         }
@@ -111,5 +113,16 @@ class AnimalDetailFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
 
+fun TextView.showOrGone(textValue: String) {
+    val trimmed = textValue.trim()
+    if (trimmed.isBlank()) {
+        visibility = View.GONE
+    } else {
+        visibility = View.VISIBLE
+        text = trimmed
+    }
+}

@@ -15,7 +15,10 @@ import com.example.crdemo.adapter.PlantAdapter
 import com.example.crdemo.databinding.ActivityMainBinding
 import com.example.crdemo.ui.fragments.AnimalDetailFragment
 import com.example.crdemo.ui.fragments.ExhibitDetailFragment
+import com.example.crdemo.ui.fragments.PlantDetailFragment
 import com.example.crdemo.viewmodel.ZooViewModel
+import com.google.ai.client.generativeai.BuildConfig
+import com.google.ai.client.generativeai.GenerativeModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -126,9 +129,37 @@ class MainActivity : AppCompatActivity() {
         fragment.show(supportFragmentManager, "ExhibitDetailFragment")
     }
     private fun showAnimalDetail(animalId: Int) {
+        // 建立對話框的實例
+        val dialogFragment = AnimalDetailFragment()
+        // 設置參數 (animal_id)
+        val bundle = Bundle().apply {
+            putInt("animal_id", animalId)
+        }
+        dialogFragment.arguments = bundle
 
+        // 以對話框形式顯示
+        dialogFragment.show(supportFragmentManager, "AnimalDetailDialog")
     }
-    private fun showPlantDetail(plantId: Int) { /* ... */ }
+    private fun showPlantDetail(plantId: Int) {
+// 建立對話框的實例
+        val dialogFragment = PlantDetailFragment()
+        val bundle = Bundle().apply {
+            putInt("plant_id", plantId)
+        }
+        dialogFragment.arguments = bundle
+
+        // 以對話框形式顯示
+        dialogFragment.show(supportFragmentManager, "PlantDetailDialog")
+    }
+
+//    fun useGeminiAPI(){
+//        val generativeModel = GenerativeModel(
+//            // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+//            modelName = "gemini-1.5-flash",
+//            // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+//            apiKey = BuildConfig.apiKey
+//        )
+//    }
 }
 
 

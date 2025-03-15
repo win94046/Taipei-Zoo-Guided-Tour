@@ -1,171 +1,210 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    >
 
-    <LinearLayout
+    <!-- 上方可捲動內容 -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tvAnimalName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="動物名稱"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/tvAnimalLatinName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="學名"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalPhylum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="門"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalClass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="綱"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="目"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalFamily"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="科"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalConservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="保育狀況"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalDistribution"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分布地區"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalHabitat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="棲息地"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalFeature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="特徵"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalBehavior"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="行為"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalDiet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="飲食習慣"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalCrisis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="危機"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvAnimalInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="館區位置"
-            android:textSize="16sp"
-            android:paddingTop="4dp"/>
-
-        <!-- 動物圖片 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="相關圖片"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingTop="8dp"/>
-
-        <ImageView
-            android:id="@+id/ivAnimalPic1"
+        <!--
+             在 NestedScrollView 裡面，一定只能有一個直接子 View，
+             這裡用 LinearLayout 再包起來所有文字與圖片
+        -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:paddingTop="8dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:theme="@style/MyTheme_AnimalDialog"
+            >
 
-        <ImageView
-            android:id="@+id/ivAnimalPic2"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:paddingTop="8dp"/>
+            <!-- 動物名稱 -->
+            <TextView
+                android:id="@+id/tvAnimalName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="動物名稱"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/ivAnimalPic3"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:paddingTop="8dp"/>
+            <TextView
+                android:id="@+id/tvAnimalLatinName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="學名"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                  />
 
-        <ImageView
-            android:id="@+id/ivAnimalPic4"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:paddingTop="8dp"/>
+            <TextView
+                android:id="@+id/tvAnimalPhylum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="門"
+                android:textSize="16sp"
+                  />
 
-        <!-- 影片按鈕 -->
+            <TextView
+                android:id="@+id/tvAnimalClass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="綱"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="目"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalFamily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="科"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalConservation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保育狀況"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalDistribution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分布地區"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalHabitat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="棲息地"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalFeature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="特徵"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalBehavior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="行為"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalDiet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="飲食習慣"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalCrisis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="危機"
+                android:textSize="16sp"
+                  />
+
+            <TextView
+                android:id="@+id/tvAnimalInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="館區位置"
+                android:textSize="16sp"
+                  />
+
+            <!-- 分段標題：相關圖片 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相關圖片"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                   />
+
+            <ImageView
+                android:id="@+id/ivAnimalPic1"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                   />
+
+            <ImageView
+                android:id="@+id/ivAnimalPic2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                   />
+
+            <ImageView
+                android:id="@+id/ivAnimalPic3"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                   />
+
+            <ImageView
+                android:id="@+id/ivAnimalPic4"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                   />
+
+            <!-- 影片按鈕 (延伸至整個寬度) -->
+            <Button
+                android:id="@+id/btnWatchVideo"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="觀看影片"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!--
+         下方固定 60dp 區域，用來放「關閉」按鈕。
+         由於 NestedScrollView 使用 layout_weight="1"，
+         所以會自動撐滿剩餘高度，這裡則保持固定 60dp
+    -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:background="@android:color/white"
+        android:elevation="4dp">
+
         <Button
-            android:id="@+id/btnWatchVideo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="觀看影片"
-            android:paddingTop="8dp"
-            android:visibility="gone"/>
+            android:id="@+id/btnClose"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="關閉"/>
+    </FrameLayout>
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

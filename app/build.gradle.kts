@@ -100,4 +100,7 @@ dependencies {
     //加入 Room KTX 來支援 suspend 函數
     implementation("androidx.room:room-ktx:2.5.2")
 
+    // add the dependency for the Google AI client SDK for Android
+    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
+
 }

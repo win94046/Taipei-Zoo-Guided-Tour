@@ -1,0 +1,16 @@
+<resources>
+    <style name="MyDrawerTheme" parent="ThemeOverlay.AppCompat.Light">
+        <!-- 統一文字顏色 -->
+        <item name="android:textColor">@android:color/black</item>
+        <!-- 你也可以在這裡設定想要的字體大小、字重等 -->
+    </style>
+    <style name="MyTextViewStyle" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MyTheme_AnimalDialog" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+    </style>
+</resources>
