@@ -3,12 +3,12 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt") // 確保這行存在
     id("com.google.dagger.hilt.android")
+    // 1. Include the plugin
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
-
 android {
     namespace = "com.example.crdemo"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.example.crdemo"
         minSdk = 24
@@ -41,6 +41,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
