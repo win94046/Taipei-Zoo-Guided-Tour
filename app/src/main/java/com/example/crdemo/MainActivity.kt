@@ -9,13 +9,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.crdemo.BuildConfig.apiKey
 import com.example.crdemo.adapter.AnimalAdapter
 import com.example.crdemo.adapter.ExhibitAdapter
 import com.example.crdemo.adapter.PlantAdapter
+import com.example.crdemo.data.model.AnimalDataTable
+import com.example.crdemo.data.model.ExhibitTable
+import com.example.crdemo.data.model.PlantDataTable
 import com.example.crdemo.databinding.ActivityMainBinding
 import com.example.crdemo.ui.fragments.AnimalDetailFragment
 import com.example.crdemo.ui.fragments.ExhibitDetailFragment
 import com.example.crdemo.ui.fragments.PlantDetailFragment
+import com.example.crdemo.viewmodel.ListType
 import com.example.crdemo.viewmodel.ZooViewModel
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
@@ -41,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         // 漢堡按鈕
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         binding.toolbar.setNavigationIcon(R.drawable.menu_summary_button_icon)
-
         /// 點擊左上角 -> 開 / 關 Drawer
         binding.toolbar.setNavigationOnClickListener {
             toggleDrawer()
@@ -55,6 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         // 綁定抽屜內各個 TextView 的點擊事件
         initDrawerMenuClick()
+
+        Log.d("API_KEY", apiKey)
     }
 
 
@@ -73,50 +79,43 @@ class MainActivity : AppCompatActivity() {
      * 設定抽屜裡的 TextView click 事件
      */
     private fun initDrawerMenuClick() {
-        // 展覽區域
-        binding.leftDrawer?.findViewById<TextView>(R.id.tvExhibitMenu)?.setOnClickListener {
-            binding.recyclerView?.adapter = exhibitAdapter
-            binding.drawerLayout?.closeDrawer(GravityCompat.START) // 選完就關閉抽屜
-        }
-        // 動物總攬
-        binding.leftDrawer?.findViewById<TextView>(R.id.tvAnimalMenu)?.setOnClickListener {
-            binding.recyclerView?.adapter = animalAdapter
+        binding.leftDrawer.findViewById<TextView>(R.id.tvExhibitMenu).setOnClickListener {
+            zooViewModel.setAdapterType(ListType.EXHIBIT)
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
-        // 植物總攬
+        binding.leftDrawer.findViewById<TextView>(R.id.tvAnimalMenu).setOnClickListener {
+            zooViewModel.setAdapterType(ListType.ANIMAL)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        }
         binding.leftDrawer.findViewById<TextView>(R.id.tvPlantMenu).setOnClickListener {
-            binding.recyclerView?.adapter = plantAdapter
+            zooViewModel.setAdapterType(ListType.PLANT)
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
     }
 
-    // ==================== 其餘程式不變 ====================
     private fun setupAdapters() {
-        exhibitAdapter = ExhibitAdapter { exhibitId ->
-            showExhibitDetail(exhibitId)
-        }
-        animalAdapter = AnimalAdapter { animalId ->
-            showAnimalDetail(animalId)
-        }
-        plantAdapter = PlantAdapter { plantId ->
-            showPlantDetail(plantId)
-        }
+        exhibitAdapter = ExhibitAdapter { showExhibitDetail(it) }
+        animalAdapter = AnimalAdapter { showAnimalDetail(it) }
+        plantAdapter = PlantAdapter { showPlantDetail(it) }
 
-        // 預設先顯示「動物總攬」
-        binding.recyclerView?.layoutManager = LinearLayoutManager(this@MainActivity)
-        binding.recyclerView?.adapter = animalAdapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
     }
     private fun setupObservers() {
-        zooViewModel.exhibits.observe(this) { exhibitList ->
-            exhibitAdapter.submitList(exhibitList)
+        zooViewModel.currentAdapterType.observe(this) { adapterType ->
+            when (adapterType) {
+                ListType.ANIMAL -> binding.recyclerView.adapter = animalAdapter
+                ListType.PLANT -> binding.recyclerView.adapter = plantAdapter
+                ListType.EXHIBIT -> binding.recyclerView.adapter = exhibitAdapter
+            }
         }
-        // 監聽動物列表
-        zooViewModel.allAnimals.observe(this) { animalList ->
-            animalAdapter.submitList(animalList)
-        }
-        // 監聽植物列表
-        zooViewModel.allPlants.observe(this) { plantList ->
-            plantAdapter.submitList(plantList)
+
+        zooViewModel.currentList.observe(this) { list ->
+            when (zooViewModel.currentAdapterType.value) {
+                ListType.ANIMAL -> animalAdapter.submitList(list as List<AnimalDataTable>)
+                ListType.PLANT -> plantAdapter.submitList(list as List<PlantDataTable>)
+                ListType.EXHIBIT -> exhibitAdapter.submitList(list as List<ExhibitTable>)
+                else -> {}
+            }
         }
     }
 
@@ -151,15 +150,6 @@ class MainActivity : AppCompatActivity() {
         // 以對話框形式顯示
         dialogFragment.show(supportFragmentManager, "PlantDetailDialog")
     }
-
-//    fun useGeminiAPI(){
-//        val generativeModel = GenerativeModel(
-//            // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
-//            modelName = "gemini-1.5-flash",
-//            // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-//            apiKey = BuildConfig.apiKey
-//        )
-//    }
 }
 
 
