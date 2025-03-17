@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.crdemo.databinding.DialogChatBinding
@@ -35,10 +36,11 @@ class ChatDialogFragment : DialogFragment() {
         // 發送按鈕點擊事件
         binding.btnSend.setOnClickListener {
             val userMessage = binding.etUserInput.text.toString()
-            if (userMessage.isNotEmpty()) {
-                zooViewModel.postMessage(userMessage)
-                binding.etUserInput.text.clear()
-            }
+//            if (userMessage.isNotEmpty()) {
+//                zooViewModel.postMessage(userMessage)
+//                binding.etUserInput.text.clear()
+//            }
+            Toast.makeText(requireContext(), "功能已關閉", Toast.LENGTH_SHORT).show()
         }
 
         // 關閉對話框

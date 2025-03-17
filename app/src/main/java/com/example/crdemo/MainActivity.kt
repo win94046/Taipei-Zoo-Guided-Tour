@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.crdemo.BuildConfig.apiKey
 import com.example.crdemo.adapter.AnimalAdapter
 import com.example.crdemo.adapter.ExhibitAdapter
 import com.example.crdemo.adapter.PlantAdapter

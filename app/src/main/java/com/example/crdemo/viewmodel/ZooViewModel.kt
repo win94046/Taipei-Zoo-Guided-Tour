@@ -62,7 +62,7 @@ class ZooViewModel @Inject constructor(
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
-        apiKey = apiKey,
+        apiKey = "none apiKey",
     )
 
     init {
