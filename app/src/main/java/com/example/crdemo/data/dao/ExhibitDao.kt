@@ -2,6 +2,7 @@ package com.example.crdemo.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.crdemo.data.model.AnimalDataTable
 import com.example.crdemo.data.model.ExhibitDetailView
 import com.example.crdemo.data.model.ExhibitTable
 
@@ -15,6 +16,10 @@ interface ExhibitDao {
 
     @Query("SELECT * FROM exhibits WHERE _id = :id")
     fun getExhibitById(id: Int): LiveData<ExhibitTable>
+
+    //  新增 suspend 版本，直接返回 List，適合一次性查詢
+    @Query("SELECT * FROM exhibits")
+    suspend fun getAllExhibitsList(): List<ExhibitTable>
 
     @Query("SELECT * FROM exhibits")
     fun getAllExhibits(): LiveData<List<ExhibitTable>>

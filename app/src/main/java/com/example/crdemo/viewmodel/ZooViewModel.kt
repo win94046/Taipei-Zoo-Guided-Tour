@@ -111,6 +111,62 @@ class ZooViewModel @Inject constructor(
     fun getExhibitById(id: Int): LiveData<ExhibitTable> {
         return repository.getExhibitById(id)
     }
+
+    fun updateMessage(text: String) {
+        message.value = text
+        Log.d("ZooViewModel", "updateMessage called with text: $text")
+    }
+
+
+    suspend fun getAllDataString(): String {
+        val animals = repository.getAllAnimalsList()
+        val plants = repository.getAllPlantsList()
+        val exhibits = repository.getAllExhibitsList()
+
+        val animalsData = animals.joinToString("\n") { "動物: ${it.nameChinese} (學名: ${it.nameLatin})" }
+        val plantsData = plants.joinToString("\n") { "植物: ${it.nameChinese} (學名: ${it.nameLatin})" }
+        val exhibitsData = exhibits.joinToString("\n") { "展覽區: ${it.e_name} (類別: ${it.e_category})" }
+
+        return """
+        這是動物園的所有數據：
+        🐾 動物：
+        $animalsData
+
+        🌱 植物：
+        $plantsData
+
+        🏛 展覽區：
+        $exhibitsData
+    """.trimIndent()
+    }
+
+    fun postMessage(message: String) {
+        viewModelScope.launch {
+            try {
+                val databaseInfo = withContext(Dispatchers.IO) { getAllDataString() } // 🔥 確保 Room 操作在 IO 執行
+                val prompt = """
+                以下是動物園的所有資訊：
+                $databaseInfo
+                
+                使用者問題：
+                $message
+                
+                上述問題請用英文回答
+            """.trimIndent()
+
+                val response = generativeModel.generateContent(prompt)
+                val responseText = response.text ?: "無回應"
+
+                updateMessage(responseText)
+            } catch (e: Exception) {
+                Log.e("ZooViewModel", "Gemini API 錯誤: ${e.message}")
+                updateMessage("請求失敗，請稍後再試")
+            }
+        }
+    }
+
+
+
 }
 
 // 定義類型

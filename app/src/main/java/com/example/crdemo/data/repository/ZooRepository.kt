@@ -59,6 +59,10 @@ class ZooRepository @Inject constructor(
         return animalDao.getAllAnimals()
     }
 
+    suspend fun getAllAnimalsList(): List<AnimalDataTable> {
+        return animalDao.getAllAnimalsList()
+    }
+
     suspend fun refreshAnimals() {
         try {
             val response = apiService.getAnimalData()
@@ -113,6 +117,10 @@ class ZooRepository @Inject constructor(
         return plantDao.getAllPlants()
     }
 
+    suspend fun getAllPlantsList(): List<PlantDataTable> {
+        return plantDao.getAllPlantsList()
+    }
+
     suspend fun refreshPlants() {
         try {
             val response = apiService.getPlantData()
@@ -155,6 +163,10 @@ class ZooRepository @Inject constructor(
      */
     fun getAllExhibits(): LiveData<List<ExhibitTable>> {
         return exhibitDao.getAllExhibits()
+    }
+
+    suspend fun getAllExhibitsList(): List<ExhibitTable> {
+        return exhibitDao.getAllExhibitsList()
     }
 
     suspend fun refreshExhibits() {

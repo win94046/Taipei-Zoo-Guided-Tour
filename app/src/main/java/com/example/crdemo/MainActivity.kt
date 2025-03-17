@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.crdemo.BuildConfig.apiKey
 import com.example.crdemo.adapter.AnimalAdapter
@@ -18,6 +19,7 @@ import com.example.crdemo.data.model.ExhibitTable
 import com.example.crdemo.data.model.PlantDataTable
 import com.example.crdemo.databinding.ActivityMainBinding
 import com.example.crdemo.ui.fragments.AnimalDetailFragment
+import com.example.crdemo.ui.fragments.ChatDialogFragment
 import com.example.crdemo.ui.fragments.ExhibitDetailFragment
 import com.example.crdemo.ui.fragments.PlantDetailFragment
 import com.example.crdemo.viewmodel.ListType
@@ -25,6 +27,7 @@ import com.example.crdemo.viewmodel.ZooViewModel
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -60,7 +63,12 @@ class MainActivity : AppCompatActivity() {
         // 綁定抽屜內各個 TextView 的點擊事件
         initDrawerMenuClick()
 
-        Log.d("API_KEY", apiKey)
+        binding.btnOpenChatDialog?.setOnClickListener {
+            val dialog = ChatDialogFragment()
+            dialog.show(supportFragmentManager, "ChatDialogFragment")
+        }
+
+//        zooViewModel.postMessage("動物園有幾種動物?")
     }
 
 
@@ -91,9 +99,18 @@ class MainActivity : AppCompatActivity() {
     }
     //  監聽 ViewModel 來控制 UI 變更
     private fun setupAdapters() {
-        exhibitAdapter = ExhibitAdapter { zooViewModel.onItemClicked(ListType.EXHIBIT, it) }
-        animalAdapter = AnimalAdapter { zooViewModel.onItemClicked(ListType.ANIMAL, it) }
-        plantAdapter = PlantAdapter { zooViewModel.onItemClicked(ListType.PLANT, it) }
+        exhibitAdapter = ExhibitAdapter {
+            zooViewModel.onItemClicked(ListType.EXHIBIT, it)
+
+        }
+        animalAdapter = AnimalAdapter {
+            zooViewModel.onItemClicked(ListType.ANIMAL, it)
+
+        }
+        plantAdapter = PlantAdapter {
+            zooViewModel.onItemClicked(ListType.PLANT, it)
+
+        }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
     }
