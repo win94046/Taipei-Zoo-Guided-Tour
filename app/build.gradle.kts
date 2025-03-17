@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.benchmark.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -103,5 +104,8 @@ dependencies {
 
     // add the dependency for the Google AI client SDK for Android
     implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
+
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+
 
 }

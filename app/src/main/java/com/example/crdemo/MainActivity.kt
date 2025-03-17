@@ -80,32 +80,31 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initDrawerMenuClick() {
         binding.leftDrawer.findViewById<TextView>(R.id.tvExhibitMenu).setOnClickListener {
-            zooViewModel.setAdapterType(ListType.EXHIBIT)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            zooViewModel.onMenuItemClicked(ListType.EXHIBIT)
         }
         binding.leftDrawer.findViewById<TextView>(R.id.tvAnimalMenu).setOnClickListener {
-            zooViewModel.setAdapterType(ListType.ANIMAL)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            zooViewModel.onMenuItemClicked(ListType.ANIMAL)
         }
         binding.leftDrawer.findViewById<TextView>(R.id.tvPlantMenu).setOnClickListener {
-            zooViewModel.setAdapterType(ListType.PLANT)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            zooViewModel.onMenuItemClicked(ListType.PLANT)
         }
     }
-
+    //  監聽 ViewModel 來控制 UI 變更
     private fun setupAdapters() {
-        exhibitAdapter = ExhibitAdapter { showExhibitDetail(it) }
-        animalAdapter = AnimalAdapter { showAnimalDetail(it) }
-        plantAdapter = PlantAdapter { showPlantDetail(it) }
+        exhibitAdapter = ExhibitAdapter { zooViewModel.onItemClicked(ListType.EXHIBIT, it) }
+        animalAdapter = AnimalAdapter { zooViewModel.onItemClicked(ListType.ANIMAL, it) }
+        plantAdapter = PlantAdapter { zooViewModel.onItemClicked(ListType.PLANT, it) }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
     }
+    // 👀 監聽 ViewModel 來控制 UI 變更
     private fun setupObservers() {
         zooViewModel.currentAdapterType.observe(this) { adapterType ->
             when (adapterType) {
                 ListType.ANIMAL -> binding.recyclerView.adapter = animalAdapter
                 ListType.PLANT -> binding.recyclerView.adapter = plantAdapter
                 ListType.EXHIBIT -> binding.recyclerView.adapter = exhibitAdapter
+                null -> {}
             }
         }
 
@@ -116,6 +115,21 @@ class MainActivity : AppCompatActivity() {
                 ListType.EXHIBIT -> exhibitAdapter.submitList(list as List<ExhibitTable>)
                 else -> {}
             }
+        }
+
+        zooViewModel.navigateToDetail.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { (type, id) ->
+                when (type) {
+                    ListType.EXHIBIT -> showExhibitDetail(id)
+                    ListType.ANIMAL -> showAnimalDetail(id)
+                    ListType.PLANT -> showPlantDetail(id)
+                }
+            }
+        }
+
+        // 監聽 `closeDrawerEvent`，當 ViewModel 觸發事件時關閉 Drawer
+        zooViewModel.closeDrawerEvent.observe(this) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
     }
 
