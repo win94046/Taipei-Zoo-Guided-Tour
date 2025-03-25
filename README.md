@@ -12,6 +12,7 @@
         // Access your API key as a Build Configuration variable
         val apiKey = "your apkkey"
     ```
+    - if `val apiKey = "your apkkey" not work` , can use  `apiKey = "your apkkey"` instead
     
 
 
