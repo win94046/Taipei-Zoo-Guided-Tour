@@ -1,14 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-kapt") // 確保這行存在
-    id("com.google.dagger.hilt.android")
-    // 1. Include the plugin
+    alias(libs.plugins.kotlin.compose.compiler)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.hilt.android)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
 }
+
 android {
     namespace = "com.example.crdemo"
-    compileSdk = 34
+    compileSdk = 36
+
     defaultConfig {
         applicationId = "com.example.crdemo"
         minSdk = 24
@@ -31,21 +34,25 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
     }
+
     buildFeatures {
         compose = true
         viewBinding = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -75,8 +82,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     //add gson to read json
     implementation(libs.gson)
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    kapt("com.github.bumptech.glide:compiler:4.15.1") // KAPT 用於 Glide 生成 API
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0") // 自動解析 JSON
@@ -89,23 +96,21 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.3")
 
     // Hilt dependencies
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.compiler)
 
     // Room dependencies
-    implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1") // Java 使用
-    kapt("androidx.room:room-compiler:2.6.1") // Kotlin 使用
-    //加入 Room KTX 來支援 suspend 函數
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     // add the dependency for the Google AI client SDK for Android
     implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-
-
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }
