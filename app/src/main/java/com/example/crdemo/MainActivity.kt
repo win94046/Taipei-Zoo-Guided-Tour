@@ -40,8 +40,6 @@ class MainActivity : AppCompatActivity() {
         setContent {
             HomePage()
         }
-        // 取得動物、植物與展覽資料
-        zooViewModel.refreshAllData()
 //        zooViewModel.postMessage("動物園有幾種動物?")
     }
 }

@@ -14,10 +14,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.crdemo.R
 import com.example.crdemo.ui.component.AnimalItem
+import com.example.crdemo.viewmodel.SettingsViewModel
 import com.example.crdemo.viewmodel.ZooViewModel
 
 @Preview
@@ -25,7 +27,13 @@ import com.example.crdemo.viewmodel.ZooViewModel
 @Composable
 fun HomePage(){
     val viewModel: ZooViewModel = hiltViewModel()
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
     val allAnimals = viewModel.allAnimals.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        // 取得動物、植物與展覽資料
+        settingsViewModel.changeTaipeiZooUrl()
+        viewModel.refreshAllData()
+    }
     Scaffold(
         topBar = {
             TopAppBar(
