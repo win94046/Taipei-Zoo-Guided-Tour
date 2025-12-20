@@ -21,8 +21,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-@Singleton
-class ZooRepository @Inject constructor(
+
+class ZooRepository (
     private val animalDao: AnimalDao,
     private val plantDao: PlantDao,
     private val exhibitDao: ExhibitDao,
