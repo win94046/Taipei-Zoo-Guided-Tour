@@ -2,7 +2,7 @@ package com.example.crdemo.data.repository
 
 
 import android.util.Log
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import com.example.crdemo.data.dao.AnimalDao
 import com.example.crdemo.data.dao.ExhibitDao
 import com.example.crdemo.data.dao.PlantDao
@@ -38,24 +38,24 @@ class ZooRepository @Inject constructor(
     }
 
     // 🔍 查詢特定動物
-    fun getAnimalById(id: Int): LiveData<AnimalDataTable> {
+    fun getAnimalById(id: Int): Flow<AnimalDataTable> {
         return animalDao.getAnimalById(id)
     }
 
     // 🔍 查詢特定植物
-    fun getPlantById(id: Int): LiveData<PlantDataTable> {
+    fun getPlantById(id: Int): Flow<PlantDataTable> {
         return plantDao.getPlantById(id)
     }
 
     // 🔍 查詢特定展覽
-    fun getExhibitById(id: Int): LiveData<ExhibitTable> {
+    fun getExhibitById(id: Int): Flow<ExhibitTable> {
         return exhibitDao.getExhibitById(id)
     }
 
     /**
      * 🔥 獲取動物資料 (先從 Room 讀取，如果沒有則從 API 請求並存入本地)
      */
-    fun getAllAnimals(): LiveData<List<AnimalDataTable>> {
+    fun getAllAnimals(): Flow<List<AnimalDataTable>> {
         return animalDao.getAllAnimals()
     }
 
@@ -113,7 +113,7 @@ class ZooRepository @Inject constructor(
     /**
      * 🔥 獲取植物資料 (同上)
      */
-    fun getAllPlants(): LiveData<List<PlantDataTable>> {
+    fun getAllPlants(): Flow<List<PlantDataTable>> {
         return plantDao.getAllPlants()
     }
 
@@ -161,7 +161,7 @@ class ZooRepository @Inject constructor(
     /**
      * 🔥 獲取展覽資料 (同上)
      */
-    fun getAllExhibits(): LiveData<List<ExhibitTable>> {
+    fun getAllExhibits(): Flow<List<ExhibitTable>> {
         return exhibitDao.getAllExhibits()
     }
 
@@ -199,7 +199,7 @@ class ZooRepository @Inject constructor(
     }
 
 
-    fun getExhibitDetails(exhibitName: String): LiveData<ExhibitDetailView?> {
+    fun getExhibitDetails(exhibitName: String): Flow<ExhibitDetailView?> {
         return exhibitDao.getExhibitDetail(exhibitName)
     }
 

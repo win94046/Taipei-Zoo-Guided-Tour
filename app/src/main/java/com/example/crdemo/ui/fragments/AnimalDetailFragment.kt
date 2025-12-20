@@ -43,42 +43,42 @@ class AnimalDetailFragment : DialogFragment() {
 
         // 取得 animalId
         val animalId = arguments?.getInt("animal_id")?: return
-        viewModel.getAnimalById(animalId).observe(viewLifecycleOwner) { animal ->
-            animal?.let {
-                binding.tvAnimalName.text = "${animal.nameChinese} (${animal.nameEnglish})"
-                binding.tvAnimalLatinName.showOrGone("學名: ${animal.nameLatin}")
-                binding.tvAnimalPhylum.showOrGone("門: ${animal.phylum}")
-                binding.tvAnimalClass.showOrGone("綱: ${animal.animalClass}")
-                binding.tvAnimalOrder.showOrGone("目: ${animal.order}")
-                binding.tvAnimalFamily.showOrGone("科: ${animal.family}")
-                binding.tvAnimalConservation.showOrGone("保育狀況: ${animal.conservation}")
-                binding.tvAnimalDistribution.showOrGone("分布地區: \n${animal.distribution}")
-                binding.tvAnimalHabitat.showOrGone("棲息地: \n${animal.habitat ?: "未知"}")
-                binding.tvAnimalFeature.showOrGone("特徵: \n${animal.feature ?: "無"}")
-                binding.tvAnimalBehavior.showOrGone("行為: \n${animal.behavior ?: "無"}")
-                binding.tvAnimalDiet.showOrGone("飲食習慣: \n${animal.diet ?: "無"}")
-                binding.tvAnimalCrisis.showOrGone("危機: \n${animal.crisis ?: "無"}")
-                binding.tvAnimalInfo.showOrGone("館區位置: \n${animal.location}")
-
-                // 載入圖片
-                loadAnimalImage(animal.pic01Url, binding.ivAnimalPic1)
-                loadAnimalImage(animal.pic02Url, binding.ivAnimalPic2)
-                loadAnimalImage(animal.pic03Url, binding.ivAnimalPic3)
-                loadAnimalImage(animal.pic04Url, binding.ivAnimalPic4)
-
-                // 設定影片按鈕
-                if (!animal.videoUrl.isNullOrEmpty()) {
-                    binding.btnWatchVideo.visibility = View.VISIBLE
-                    binding.btnWatchVideo.setOnClickListener {
-                        openVideo(animal.videoUrl)
-                    }
-                } else {
-                    binding.btnWatchVideo.visibility = View.GONE
-                }
-
-                binding.btnClose.setOnClickListener { dismiss() }
-            }
-        }
+//        viewModel.getAnimalById(animalId).observe(viewLifecycleOwner) { animal ->
+//            animal?.let {
+//                binding.tvAnimalName.text = "${animal.nameChinese} (${animal.nameEnglish})"
+//                binding.tvAnimalLatinName.showOrGone("學名: ${animal.nameLatin}")
+//                binding.tvAnimalPhylum.showOrGone("門: ${animal.phylum}")
+//                binding.tvAnimalClass.showOrGone("綱: ${animal.animalClass}")
+//                binding.tvAnimalOrder.showOrGone("目: ${animal.order}")
+//                binding.tvAnimalFamily.showOrGone("科: ${animal.family}")
+//                binding.tvAnimalConservation.showOrGone("保育狀況: ${animal.conservation}")
+//                binding.tvAnimalDistribution.showOrGone("分布地區: \n${animal.distribution}")
+//                binding.tvAnimalHabitat.showOrGone("棲息地: \n${animal.habitat ?: "未知"}")
+//                binding.tvAnimalFeature.showOrGone("特徵: \n${animal.feature ?: "無"}")
+//                binding.tvAnimalBehavior.showOrGone("行為: \n${animal.behavior ?: "無"}")
+//                binding.tvAnimalDiet.showOrGone("飲食習慣: \n${animal.diet ?: "無"}")
+//                binding.tvAnimalCrisis.showOrGone("危機: \n${animal.crisis ?: "無"}")
+//                binding.tvAnimalInfo.showOrGone("館區位置: \n${animal.location}")
+//
+//                // 載入圖片
+//                loadAnimalImage(animal.pic01Url, binding.ivAnimalPic1)
+//                loadAnimalImage(animal.pic02Url, binding.ivAnimalPic2)
+//                loadAnimalImage(animal.pic03Url, binding.ivAnimalPic3)
+//                loadAnimalImage(animal.pic04Url, binding.ivAnimalPic4)
+//
+//                // 設定影片按鈕
+//                if (!animal.videoUrl.isNullOrEmpty()) {
+//                    binding.btnWatchVideo.visibility = View.VISIBLE
+//                    binding.btnWatchVideo.setOnClickListener {
+//                        openVideo(animal.videoUrl)
+//                    }
+//                } else {
+//                    binding.btnWatchVideo.visibility = View.GONE
+//                }
+//
+//                binding.btnClose.setOnClickListener { dismiss() }
+//            }
+//        }
 
     }
 

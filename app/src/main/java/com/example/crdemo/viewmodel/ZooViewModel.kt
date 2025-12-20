@@ -1,24 +1,18 @@
 package com.example.crdemo.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.*
-
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.crdemo.BuildConfig.apiKey
-import com.example.crdemo.data.model.AnimalData
 import com.example.crdemo.data.model.AnimalDataTable
-import com.example.crdemo.data.model.Exhibit
-import com.example.crdemo.data.model.ExhibitDetailView
 import com.example.crdemo.data.model.ExhibitTable
-import com.example.crdemo.data.model.PlantData
 import com.example.crdemo.data.model.PlantDataTable
 import com.example.crdemo.data.repository.ZooRepository
 import com.google.ai.client.generativeai.GenerativeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -31,34 +25,38 @@ class ZooViewModel @Inject constructor(
 
 
     // 管理 選單點擊事件
-    private val _closeDrawerEvent = MutableLiveData<Unit>()
-    val closeDrawerEvent: LiveData<Unit> get() = _closeDrawerEvent
+    private val _closeDrawerEvent = Channel<Unit>(Channel.BUFFERED)
+    val closeDrawerEvent: Flow<Unit> = _closeDrawerEvent.receiveAsFlow()
 
-    //  LiveData - 監聽動物、植物、展覽數據
-    val allAnimals: LiveData<List<AnimalDataTable>> = repository.getAllAnimals()
-    val allPlants: LiveData<List<PlantDataTable>> = repository.getAllPlants()
-    val exhibits: LiveData<List<ExhibitTable>> = repository.getAllExhibits()
+    //  Flow - 監聽動物、植物、展覽數據
+    val allAnimals: StateFlow<List<AnimalDataTable>> = repository.getAllAnimals()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
+    val allPlants: StateFlow<List<PlantDataTable>> = repository.getAllPlants()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    val exhibits: StateFlow<List<ExhibitTable>> = repository.getAllExhibits()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
 
     // 當前顯示的適配器類型
-    private val _currentAdapterType = MutableLiveData<ListType>()
-    val currentAdapterType: LiveData<ListType> get() = _currentAdapterType
+    private val _currentAdapterType = MutableStateFlow(ListType.ANIMAL)
+    val currentAdapterType: StateFlow<ListType> = _currentAdapterType.asStateFlow()
 
     // 當前顯示的數據類型
     // 讓 currentList 根據 currentAdapterType 自動變更數據來源
-    val currentList: LiveData<List<Any>> = _currentAdapterType.switchMap{ type ->
+    @Suppress("UNCHECKED_CAST")
+    val currentList: StateFlow<List<Any>> = _currentAdapterType.flatMapLatest { type ->
         when (type) {
-            ListType.ANIMAL -> allAnimals as LiveData<List<Any>>
-            ListType.PLANT -> allPlants as LiveData<List<Any>>
-            ListType.EXHIBIT -> exhibits as LiveData<List<Any>>
-            else -> MutableLiveData(emptyList())
+            ListType.ANIMAL -> allAnimals.map { it as List<Any> }
+            ListType.PLANT -> allPlants.map { it as List<Any> }
+            ListType.EXHIBIT -> exhibits.map { it as List<Any> }
         }
-    }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     //
-    private val _navigateToDetail = MutableLiveData<Event<Pair<ListType, Int>>>()
-    val navigateToDetail: LiveData<Event<Pair<ListType, Int>>> get() = _navigateToDetail
+    private val _navigateToDetail = Channel<Pair<ListType, Int>>(Channel.BUFFERED)
+    val navigateToDetail: Flow<Pair<ListType, Int>> = _navigateToDetail.receiveAsFlow()
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
@@ -66,11 +64,11 @@ class ZooViewModel @Inject constructor(
     )
 
     init {
-        setAdapterType(ListType.ANIMAL) // 預設顯示動物
+        // init is empty now as StateFlow needs initial value in constructor
     }
 
-    val message: MutableLiveData<String> = MutableLiveData()
-
+    private val _message = MutableStateFlow<String?>(null)
+    val message: StateFlow<String?> = _message.asStateFlow()
 
 
     fun setAdapterType(type: ListType) {
@@ -90,30 +88,34 @@ class ZooViewModel @Inject constructor(
 
     fun onMenuItemClicked(type: ListType) {
         setAdapterType(type)
-        _closeDrawerEvent.value = Unit // 發送 UI 事件，通知 View 關閉 Drawer
+        viewModelScope.launch {
+            _closeDrawerEvent.send(Unit) // 發送 UI 事件，通知 View 關閉 Drawer
+        }
     }
 
     fun onItemClicked(type: ListType, id: Int) {
-        _navigateToDetail.value = Event(Pair(type, id)) // 確保事件只會觸發一次
+        viewModelScope.launch {
+            _navigateToDetail.send(Pair(type, id))
+        }
     }
 
     // 🔍 根據 ID 查詢特定動物
-    fun getAnimalById(id: Int): LiveData<AnimalDataTable> {
+    fun getAnimalById(id: Int): Flow<AnimalDataTable> {
         return repository.getAnimalById(id)
     }
 
     // 🔍 根據 ID 查詢特定植物
-    fun getPlantById(id: Int): LiveData<PlantDataTable> {
+    fun getPlantById(id: Int): Flow<PlantDataTable> {
         return repository.getPlantById(id)
     }
 
     // 🔍 根據 ID 查詢特定展覽
-    fun getExhibitById(id: Int): LiveData<ExhibitTable> {
+    fun getExhibitById(id: Int): Flow<ExhibitTable> {
         return repository.getExhibitById(id)
     }
 
     fun updateMessage(text: String) {
-        message.value = text
+        _message.value = text
         Log.d("ZooViewModel", "updateMessage called with text: $text")
     }
 
@@ -165,29 +167,9 @@ class ZooViewModel @Inject constructor(
         }
     }
 
-
-
 }
 
 // 定義類型
 enum class ListType {
     ANIMAL, PLANT, EXHIBIT
-}
-
-open class Event<out T>(private val content: T) {
-
-    private var hasBeenHandled = false
-
-    /** 取得內容，確保只會被使用一次 */
-    fun getContentIfNotHandled(): T? {
-        return if (hasBeenHandled) {
-            null
-        } else {
-            hasBeenHandled = true
-            content
-        }
-    }
-
-    /** 總是回傳內容，即使它已經被使用過 */
-    fun peekContent(): T = content
 }

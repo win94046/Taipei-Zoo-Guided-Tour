@@ -32,20 +32,20 @@ class ExhibitDetailFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val exhibitId = arguments?.getInt("exhibit_id") ?: return
-        viewModel.getExhibitById(exhibitId).observe(viewLifecycleOwner) { exhibit ->
-            exhibit?.let {
-                binding.tvExhibitName.text = it.e_name
-                binding.tvExhibitCategory.text = "類別: ${it.e_category}"
-                binding.tvExhibitInfo.text = it.e_info
-                binding.tvExhibitMemo.text = "備註: ${it.e_memo}"
-
-                Glide.with(this)
-                    .load(it.e_pic_url.toSecureUrl())
-                    .into(binding.ivExhibitImage)
-
-                binding.btnClose.setOnClickListener { dismiss() }
-            }
-        }
+//        viewModel.getExhibitById(exhibitId).observe(viewLifecycleOwner) { exhibit ->
+//            exhibit?.let {
+//                binding.tvExhibitName.text = it.e_name
+//                binding.tvExhibitCategory.text = "類別: ${it.e_category}"
+//                binding.tvExhibitInfo.text = it.e_info
+//                binding.tvExhibitMemo.text = "備註: ${it.e_memo}"
+//
+//                Glide.with(this)
+//                    .load(it.e_pic_url.toSecureUrl())
+//                    .into(binding.ivExhibitImage)
+//
+//                binding.btnClose.setOnClickListener { dismiss() }
+//            }
+//        }
     }
 
     override fun onStart() {

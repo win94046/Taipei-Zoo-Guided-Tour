@@ -37,25 +37,25 @@ class PlantDetailFragment : DialogFragment() {
 
         // 取得 plantId
         val plantId = arguments?.getInt("plant_id") ?: -1
-        viewModel.getPlantById(plantId).observe(viewLifecycleOwner) { plant ->
-            plant?.let {
-                binding.tvPlantName.text = plant.nameChinese
-                binding.tvPlantLatinName.showOrGone("學名: ${plant.nameLatin}")
-                binding.tvPlantFamilyGenus.showOrGone("科: ${plant.family} | 屬: ${plant.genus}")
-                binding.tvPlantBrief.showOrGone(plant.brief)
-                binding.tvPlantFeature.showOrGone(plant.feature)
-                binding.tvPlantFunctionApplication.showOrGone(plant.functionAndApplication)
-
-                // 使用 Glide 載入圖片
-                if (!plant.imageUrl.isNullOrEmpty()) {
-                    Glide.with(requireContext()).load(plant.imageUrl.toSecureUrl()).into(binding.ivPlantImage)
-                } else {
-                    binding.ivPlantImage.visibility = View.GONE
-                }
-                binding.btnClose.setOnClickListener { dismiss() }
-
-            }
-        }
+//        viewModel.getPlantById(plantId).observe(viewLifecycleOwner) { plant ->
+//            plant?.let {
+//                binding.tvPlantName.text = plant.nameChinese
+//                binding.tvPlantLatinName.showOrGone("學名: ${plant.nameLatin}")
+//                binding.tvPlantFamilyGenus.showOrGone("科: ${plant.family} | 屬: ${plant.genus}")
+//                binding.tvPlantBrief.showOrGone(plant.brief)
+//                binding.tvPlantFeature.showOrGone(plant.feature)
+//                binding.tvPlantFunctionApplication.showOrGone(plant.functionAndApplication)
+//
+//                // 使用 Glide 載入圖片
+//                if (!plant.imageUrl.isNullOrEmpty()) {
+//                    Glide.with(requireContext()).load(plant.imageUrl.toSecureUrl()).into(binding.ivPlantImage)
+//                } else {
+//                    binding.ivPlantImage.visibility = View.GONE
+//                }
+//                binding.btnClose.setOnClickListener { dismiss() }
+//
+//            }
+//        }
 
     }
 

@@ -28,9 +28,9 @@ class ChatDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 監聽 Gemini API 回應並更新 UI
-        zooViewModel.message.observe(viewLifecycleOwner) { response ->
-            binding.tvChatHistory.text = response
-        }
+//        zooViewModel.message.observe(viewLifecycleOwner) { response ->
+//            binding.tvChatHistory.text = response
+//        }
 
         // 發送按鈕點擊事件
         binding.btnSend.setOnClickListener {

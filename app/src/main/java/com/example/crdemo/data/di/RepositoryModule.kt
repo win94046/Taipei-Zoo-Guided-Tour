@@ -12,19 +12,19 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object RepositoryModule {
-
-    @Singleton
-    @Provides
-    fun provideZooRepository(
-        animalDao: AnimalDao,
-        plantDao: PlantDao,
-        exhibitDao: ExhibitDao,
-        apiService: ZooApiService
-    ): ZooRepository {
-        return ZooRepository(animalDao, plantDao, exhibitDao , apiService)
-    }
-
-}
+//@Module
+//@InstallIn(SingletonComponent::class)
+//object RepositoryModule {
+//
+//    @Singleton
+//    @Provides
+//    fun provideZooRepository(
+//        animalDao: AnimalDao,
+//        plantDao: PlantDao,
+//        exhibitDao: ExhibitDao,
+//        apiService: ZooApiService
+//    ): ZooRepository {
+//        return ZooRepository(animalDao, plantDao, exhibitDao , apiService)
+//    }
+//
+//}
