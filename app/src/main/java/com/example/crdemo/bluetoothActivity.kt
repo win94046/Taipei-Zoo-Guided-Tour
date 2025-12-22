@@ -17,6 +17,7 @@ import android.content.pm.PackageManager
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.IntentSender
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -31,27 +32,42 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.crdemo.utils.BluetoothPermissionsGate
+
 import com.example.crdemo.utils.showToast
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.DataInputStream
+import java.io.DataOutputStream
+import java.io.EOFException
 import java.io.IOException
+import java.io.InputStream
 import java.util.UUID
 import java.util.concurrent.Executor
 
@@ -62,11 +78,32 @@ class bluetoothActivity : ComponentActivity() {
         val REQUEST_ENABLE_BT = 1
         private const val SELECT_DEVICE_REQUEST_CODE = 0
         private val MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+        const val MESSAGE_READ: Int = 0
+        const val MESSAGE_WRITE: Int = 1
+        const val MESSAGE_TOAST: Int = 2
+        private val MAGIC = byteArrayOf('A'.code.toByte(), 'G'.code.toByte(), 'A'.code.toByte(), 'F'.code.toByte())
+        private const val TYPE_TEXT: Byte = 1
+        private const val TYPE_IMAGE: Byte = 2
 
+        const val MESSAGE_READ_TEXT = 100
+        const val MESSAGE_READ_IMAGE = 101
+
+        const val MESSAGE_WRITE_TEXT = 110
+        const val MESSAGE_WRITE_IMAGE = 111
     }
     @Volatile private var selectedDevice: BluetoothDevice? = null
     @Volatile private var acceptThread: AcceptThread? = null
     @Volatile private var connectThread: ConnectThread? = null
+
+    @Volatile private var connectedThread: ConnectedThread? = null
+
+    data class BtMessage(
+        val text: String,
+        val isIncoming: Boolean
+    )
+
+    private val messages = mutableStateListOf<BtMessage>()
+    private val messageList = mutableStateListOf<String>()
     private val selectedDeviceNameState = mutableStateOf("未選擇")
 
     val BTTag = "BluetoothTest"
@@ -255,6 +292,43 @@ class bluetoothActivity : ComponentActivity() {
                             startConnect(d, statusTextSetter = { statusText = it })
                         }
                     ) { Text("主動連線（Client）") }
+
+                    var inputText by remember { mutableStateOf("") }
+
+                    OutlinedTextField(
+                        value = inputText,
+                        onValueChange = { inputText = it },
+                        label = { Text("要送出的文字") }
+                    )
+
+                    Button(onClick = {
+                        connectedThread?.sendText(inputText)
+                    }) {
+                        Text("送出文字")
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Text(
+                            text = "訊息紀錄",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .border(1.dp, Color.Gray)
+                                .padding(8.dp)
+                        ) {
+                            items(messageList) { msg ->
+                                Text(text = msg)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -424,22 +498,8 @@ class bluetoothActivity : ComponentActivity() {
     }
     @SuppressLint("MissingPermission")
     private fun manageMyConnectedSocket(socket: BluetoothSocket) {
-        Thread {
-            val input = socket.inputStream
-            val output = socket.outputStream
-
-            val buffer = ByteArray(1024)
-            while (true) {
-                try {
-                    val bytes = input.read(buffer)
-                    val message = String(buffer, 0, bytes)
-                    Log.i("BT", "Received: $message")
-                } catch (e: IOException) {
-                    Log.e("BT", "Connection lost", e)
-                    break
-                }
-            }
-        }.start()
+        connectedThread?.cancel()
+        connectedThread = ConnectedThread(socket).also { it.start() }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -489,5 +549,190 @@ class bluetoothActivity : ComponentActivity() {
             )
         }
     }
+    private val uiHandler = Handler(Looper.getMainLooper()) { msg ->
+        when (msg.what) {
+
+            // ===== 收到文字 =====
+            MESSAGE_READ_TEXT -> {
+                val text = msg.obj as String
+                Log.i(BTTag, "Received text: $text")
+                messageList.add("⬅️ 收到文字：$text")
+                true
+            }
+
+            // ===== 收到圖片 =====
+            MESSAGE_READ_IMAGE -> {
+                val bytes = msg.obj as ByteArray
+                Log.i(BTTag, "Received image bytes: ${bytes.size}")
+
+                // 1) decode 成 Bitmap（傳統 View / 你也可以轉 Compose ImageBitmap）
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                if (bitmap != null) {
+                    messageList.add("⬅️ 收到圖片：${bytes.size} bytes")
+                    // TODO: 你可以把 bitmap 存到某個 state / list 裡，顯示在 UI
+                    // e.g. receivedBitmaps.add(bitmap)
+                } else {
+                    messageList.add("⚠️ 收到圖片但 decode 失敗")
+                }
+                true
+            }
+
+            // ===== 送出文字 =====
+            MESSAGE_WRITE_TEXT -> {
+                val text = msg.obj as String
+                Log.i(BTTag, "Sent text: $text")
+                messageList.add("➡️ 送出文字：$text")
+                true
+            }
+
+            // ===== 送出圖片 =====
+            MESSAGE_WRITE_IMAGE -> {
+                val size = msg.arg1 // 用 arg1 放大小最方便
+                Log.i(BTTag, "Sent image bytes: $size")
+                messageList.add("➡️ 送出圖片：$size bytes")
+                true
+            }
+
+            // ===== Toast =====
+            MESSAGE_TOAST -> {
+                val toastText = msg.data?.getString("toast").orEmpty()
+                Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            else -> false
+        }
+    }
+    private inner class ConnectedThread(private val socket: BluetoothSocket) : Thread() {
+        private val inStream = socket.inputStream
+        private val outStream = socket.outputStream
+        private fun readFully(input: InputStream, buffer: ByteArray, offset: Int, length: Int) {
+            var total = 0
+            while (total < length) {
+                val count = input.read(buffer, offset + total, length - total)
+                if (count == -1) throw EOFException("Stream ended early")
+                total += count
+            }
+        }
+
+        override fun run() {
+            val dis = DataInputStream(BufferedInputStream(inStream))
+
+            try {
+                while (true) {
+                    // 1) 讀 MAGIC（4 bytes）
+                    val magic = ByteArray(4)
+                    readFully(dis, magic, 0, 4)
+                    if (!magic.contentEquals(MAGIC)) {
+                        Log.e(BTTag, "Bad packet magic, skip...")
+                        continue
+                    }
+
+                    // 2) 讀 TYPE（1 byte）
+                    val type = dis.readByte()
+
+                    // 3) 讀 LENGTH（4 bytes）
+                    val length = dis.readInt()
+                    if (length <= 0 || length > 50 * 1024 * 1024) { // 防呆：最大 50MB
+                        Log.e(BTTag, "Invalid payload length: $length")
+                        continue
+                    }
+
+                    // 4) 讀 PAYLOAD（length bytes）
+                    val payload = ByteArray(length)
+                    readFully(dis, payload, 0, length)
+
+                    // 5) 分流：文字 or 圖片
+                    when (type) {
+                        TYPE_TEXT -> {
+                            // 文字：payload 是 UTF-8 bytes
+                            val text = payload.toString(Charsets.UTF_8)
+                            uiHandler.obtainMessage(MESSAGE_READ_TEXT, text).sendToTarget()
+                        }
+
+                        TYPE_IMAGE -> {
+                            // 圖片：payload 是 image bytes（jpg/png）
+                            uiHandler.obtainMessage(MESSAGE_READ_IMAGE, payload).sendToTarget()
+                        }
+
+                        else -> {
+                            Log.w(BTTag, "Unknown type: $type")
+                        }
+                    }
+                }
+            } catch (e: IOException) {
+                Log.d(BTTag, "Input stream disconnected", e)
+                uiHandler.obtainMessage(MESSAGE_TOAST).apply {
+                    data = Bundle().apply { putString("toast", "Bluetooth disconnected") }
+                }.sendToTarget()
+            }
+        }
+
+        fun write(bytes: ByteArray) {
+            try {
+                outStream.write(bytes)
+                outStream.flush()
+                // ✅ 回報 UI：送出的就是 bytes
+                uiHandler.obtainMessage(MESSAGE_WRITE, bytes).sendToTarget()
+            } catch (e: IOException) {
+                Log.e(BTTag, "Error sending data", e)
+                val msg = uiHandler.obtainMessage(MESSAGE_TOAST)
+                msg.data = Bundle().apply {
+                    putString("toast", "Couldn't send data to the other device")
+                }
+                uiHandler.sendMessage(msg)
+            }
+        }
+        fun writeRaw(bytes: ByteArray) {
+            try {
+                outStream.write(bytes)
+                outStream.flush()
+            } catch (e: IOException) {
+                Log.e(BTTag, "Error sending data", e)
+            }
+        }
+        fun sendText(text: String) {
+            val payload = text.toByteArray(Charsets.UTF_8)
+            try {
+                val dos = DataOutputStream(BufferedOutputStream(outStream))
+                dos.write(MAGIC)
+                dos.writeByte(TYPE_TEXT.toInt())
+                dos.writeInt(payload.size)
+                dos.write(payload)
+                dos.flush()
+
+                // 回報 UI：送出文字
+                uiHandler.obtainMessage(MESSAGE_WRITE_TEXT, text).sendToTarget()
+            } catch (e: IOException) {
+                Log.e(BTTag, "Error sending text", e)
+                uiHandler.obtainMessage(MESSAGE_TOAST).apply {
+                    data = Bundle().apply { putString("toast", "送出文字失敗") }
+                }.sendToTarget()
+            }
+        }
+
+        fun sendImage(imageBytes: ByteArray) {
+            try {
+                val dos = DataOutputStream(BufferedOutputStream(outStream))
+                dos.write(MAGIC)
+                dos.writeByte(TYPE_IMAGE.toInt())
+                dos.writeInt(imageBytes.size)
+                dos.write(imageBytes)
+                dos.flush()
+
+                // 回報 UI：送出圖片（用 arg1 放大小很方便）
+                uiHandler.obtainMessage(MESSAGE_WRITE_IMAGE, imageBytes.size, 0).sendToTarget()
+            } catch (e: IOException) {
+                Log.e(BTTag, "Error sending image", e)
+                uiHandler.obtainMessage(MESSAGE_TOAST).apply {
+                    data = Bundle().apply { putString("toast", "送出圖片失敗") }
+                }.sendToTarget()
+            }
+        }
+        fun cancel() {
+            try { socket.close() } catch (_: IOException) {}
+        }
+    }
+
 
 }

@@ -1,4 +1,5 @@
 package com.example.crdemo.utils
 
-class ConnectThread {
-}
+import android.bluetooth.BluetoothSocket
+import java.io.IOException
+
