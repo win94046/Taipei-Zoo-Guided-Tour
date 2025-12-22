@@ -19,7 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.android.dagger.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -99,8 +99,13 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    testImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.hilt.android.testing)
     kspAndroidTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.android)
+    kspTest(libs.hilt.compiler)
+    kspTest(libs.hilt.android)
+
 
     // Room dependencies
     implementation(libs.room.runtime)
