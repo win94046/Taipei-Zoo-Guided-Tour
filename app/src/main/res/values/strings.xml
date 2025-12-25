@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CRDemo</string>
     <string name="title_activity_bluetooth">bluetoothActivity</string>
+    <string name="title_activity_ble_bluetooth">BleBluetoothActivity</string>
 </resources>

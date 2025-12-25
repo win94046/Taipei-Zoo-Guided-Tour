@@ -38,13 +38,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".BleBluetoothActivity"
+            android:exported="false"
+            android:label="@string/title_activity_ble_bluetooth"
+            android:theme="@style/Theme.CRDemo" />
+        <activity
             android:name=".bluetoothActivity"
             android:exported="true"
             android:label="@string/title_activity_bluetooth"
             android:theme="@style/Theme.CRDemo">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,8 +57,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CRDemo">
-        </activity>
+            android:theme="@style/Theme.CRDemo"></activity>
     </application>
 
 </manifest>
