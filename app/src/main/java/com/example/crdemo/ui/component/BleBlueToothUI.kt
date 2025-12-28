@@ -2,6 +2,7 @@ package com.example.crdemo.ui.component
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
@@ -13,34 +14,44 @@ import androidx.compose.ui.unit.sp
 import com.example.crdemo.viewmodel.BleScanViewModel
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.crdemo.ScannedDevice
 
-@SuppressLint("MissingPermission") // 實際使用時需確保已取得 BLUETOOTH_CONNECT 權限
 @Composable
 fun LeDeviceItem(
-    device: BluetoothDevice,
+    scannedDevice: ScannedDevice, // 改收 Wrapper 物件
     onClick: (BluetoothDevice) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick(device) } // 點擊事件
+            .clickable { onClick(scannedDevice.device) }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            // 裝置名稱
-            val deviceName = device.name
+            // 顯示名稱
             Text(
-                text = if (!deviceName.isNullOrEmpty()) deviceName else "Unknown Device",
-                fontSize = 18.sp
+                // 直接使用我們在 ViewModel 解析好的名字
+                text = scannedDevice.displayName ?: "Unknown Device",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
 
-            // 裝置 MAC Address
+            // 顯示 MAC Address
             Text(
-                text = device.address,
+                text = scannedDevice.address,
                 fontSize = 14.sp
+            )
+
+            // (選用) 顯示訊號強度
+            Text(
+                text = "RSSI: ${scannedDevice.rssi} dBm",
+                fontSize = 12.sp,
+                color = Color.Gray
             )
         }
     }
@@ -54,11 +65,11 @@ fun DeviceListScreen(
     // LazyColumn 對應 RecyclerView/ListView
     LazyColumn {
         items(
-            items = viewModel.leDevices,
+            items = viewModel.scannedDevices,
             key = { device -> device.address } // 設定唯一鍵值 (MAC Address) 優化效能
         ) { device ->
             LeDeviceItem(
-                device = device,
+                scannedDevice = device,
                 onClick = onDeviceClick
             )
         }
