@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -38,7 +39,9 @@ import com.example.crdemo.utils.BluetoothPermissionsGate
 import com.example.crdemo.utils.showToast
 import com.example.crdemo.viewmodel.BleScanViewModel
 import com.example.crdemo.viewmodel.DeviceDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BleBluetoothActivity : ComponentActivity() {
     // 1. 改為 Lazy 初始化，避免在 onCreate 前調用導致崩潰
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
@@ -126,7 +129,12 @@ class BleBluetoothActivity : ComponentActivity() {
         setContent {
             var currentScreen by remember { mutableStateOf("LIST") }
             var selectedDevice by remember { mutableStateOf<BluetoothDevice?>(null) }
-
+            BackHandler(enabled = currentScreen == "DETAIL") {
+                // 當在詳情頁按下返回鍵時：
+                deviceDetailViewModel.disconnect() // 斷開連線
+                currentScreen = "LIST"             // 回到列表
+                selectedDevice = null
+            }
             CRDemoTheme {
                 // 假設這個 Gate 會負責處理 runtime permission
                 // 當權限通過後，才會渲染內部的 content
