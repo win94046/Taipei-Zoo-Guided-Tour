@@ -41,17 +41,18 @@
             android:name=".BleBluetoothActivity"
             android:exported="true"
             android:label="@string/title_activity_ble_bluetooth"
-            android:theme="@style/Theme.CRDemo" />
-        <activity
-            android:name=".bluetoothActivity"
-            android:exported="true"
-            android:label="@string/title_activity_bluetooth"
-            android:theme="@style/Theme.CRDemo">
+            android:theme="@style/Theme.CRDemo" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+    </activity>
+        <activity
+            android:name=".bluetoothActivity"
+            android:exported="true"
+            android:label="@string/title_activity_bluetooth"
+            android:theme="@style/Theme.CRDemo">
     </activity>
         <activity
             android:name=".MainActivity"
