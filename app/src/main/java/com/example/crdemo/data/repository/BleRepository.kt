@@ -14,14 +14,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
 // 定義連線狀態
 enum class ConnectionState {
     DISCONNECTED, CONNECTING, CONNECTED, DISCOVERING_SERVICES
 }
 
-class BleRepository(private val context: Context) {
-
+@Singleton // BLE 通常需要全域單例，避免重複連線或資源競爭
+class BleRepository @Inject constructor(
+    @ApplicationContext private val context: Context // Hilt 會自動幫你把 ApplicationContext 塞進來
+){
     private var bluetoothGatt: BluetoothGatt? = null
     // 定義一個資料模型來傳遞收到的數據
     // 使用 SharedFlow 發送數據事件 (因為數據是連續不斷的流)

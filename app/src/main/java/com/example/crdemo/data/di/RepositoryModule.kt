@@ -30,13 +30,13 @@ object RepositoryModule {
         return ZooRepository(animalDao, plantDao, exhibitDao , apiService)
     }
 
-    @Singleton
-    @Provides
-    fun provideBleRepository(
-        @ApplicationContext context: Context
-    ): BleRepository {
-        return BleRepository(context)
-    }
+//    @Singleton
+//    @Provides
+//    fun provideBleRepository(
+//        @ApplicationContext context: Context
+//    ): BleRepository {
+//        return BleRepository(context)
+//    }
 
 }
 

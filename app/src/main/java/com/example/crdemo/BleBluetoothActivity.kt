@@ -129,6 +129,7 @@ class BleBluetoothActivity : ComponentActivity() {
         setContent {
             var currentScreen by remember { mutableStateOf("LIST") }
             var selectedDevice by remember { mutableStateOf<BluetoothDevice?>(null) }
+
             BackHandler(enabled = currentScreen == "DETAIL") {
                 // 當在詳情頁按下返回鍵時：
                 deviceDetailViewModel.disconnect() // 斷開連線

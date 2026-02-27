@@ -42,6 +42,9 @@ android {
 
     kotlin {
         compilerOptions {
+
+            freeCompilerArgs.add("-Xannotation-default-target=param-property")
+
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
@@ -58,6 +61,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
