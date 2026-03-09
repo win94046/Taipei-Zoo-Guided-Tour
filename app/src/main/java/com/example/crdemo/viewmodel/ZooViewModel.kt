@@ -3,7 +3,7 @@ package com.example.crdemo.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.crdemo.BuildConfig.apiKey
+//import com.example.crdemo.BuildConfig.apiKey
 import com.example.crdemo.data.model.AnimalDataTable
 import com.example.crdemo.data.model.ExhibitTable
 import com.example.crdemo.data.model.PlantDataTable
@@ -60,7 +60,7 @@ class ZooViewModel @Inject constructor(
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
-        apiKey = apiKey,
+        apiKey = "apiKey",
     )
 
     init {
